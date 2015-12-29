@@ -116,4 +116,4 @@ A self-referented plot. Displays original formula with this dataset of 543 integ
 <br>
 see reference image @ /References/TuppersSelfReferent.png
 
-![alt tag](https://raw.githubusercontent.com/vkuchinov/dataVisualization/master/DataVisualizations/References/BinaryPlotExample.png)<br><br>
+![alt tag](https://raw.githubusercontent.com/vkuchinov/dataVisualization/master/DataVisualizations/References/TuppersSelfReferent.png)<br><br>
