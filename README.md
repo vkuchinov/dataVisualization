@@ -91,3 +91,29 @@ Excellent visualization for symetric number sequences like Euler's Triangle Numb
 see reference image @ /References/BinaryPlotExample.png
 
 ![alt tag](https://raw.githubusercontent.com/vkuchinov/dataVisualization/master/DataVisualizations/References/BinaryPlotExample.png)<br><br>
+
+<br>
+<b>Tupper's Self-Referent</b><br>
+<i>Everything Formula | Formula of Everything<i>
+
+<i>Syntax: EverythingFormula();</i>
+
+A self-referented plot. Displays original formula with this dataset of 543 integers:
+<br><i>
+960 939 379 918 958 884 971 672 962 127 852 754 715 004<br>
+339 660 129 306 651 505 519 271 702 802 395 266 424 689<br> 
+642 842 174 350 718 121 267 153 782 770 623 355 993 237<br> 
+280 874 144 307 891 325 963 941 337 723 487 857 735 749<br> 
+823 926 629 715 517 173 716 995 165 232 890 538 221 612<br> 
+403 238 855 866 184 013 235 585 136 048 828 693 337 902<br> 
+491 454 229 288 667 081 096 184 496 091 705 183 454 067<br> 
+827 731 551 705 405 381 627 380 967 602 565 625 016 981<br> 
+482 083 418 783 163 849 115 590 225 610 003 652 351 370<br> 
+343 874 461 848 378 737 238 198 224 849 863 465 033 159<br> 
+410 054 974 700 593 138 339 226 497 249 461 751 545 728<br> 
+366 702 369 745 461 014 655 997 933 798 537 483 143 786<br> 
+841 806 593 422 227 898 388 722 980 000 748 404 719<br></i>
+<br>
+see reference image @ /References/TuppersSelfReferent.png.png
+
+![alt tag](https://raw.githubusercontent.com/vkuchinov/dataVisualization/master/DataVisualizations/References/BinaryPlotExample.png)<br><br>
