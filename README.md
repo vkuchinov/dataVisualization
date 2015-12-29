@@ -99,7 +99,7 @@ see reference image @ /References/BinaryPlotExample.png
 <i>Syntax: EverythingFormula();</i>
 
 A self-referented plot. Displays original formula with this dataset of 543 integers:
-<br><i>
+<br><br><i>
 960 939 379 918 958 884 971 672 962 127 852 754 715 004<br>
 339 660 129 306 651 505 519 271 702 802 395 266 424 689<br> 
 642 842 174 350 718 121 267 153 782 770 623 355 993 237<br> 
@@ -114,6 +114,6 @@ A self-referented plot. Displays original formula with this dataset of 543 integ
 366 702 369 745 461 014 655 997 933 798 537 483 143 786<br> 
 841 806 593 422 227 898 388 722 980 000 748 404 719<br></i>
 <br>
-see reference image @ /References/TuppersSelfReferent.png.png
+see reference image @ /References/TuppersSelfReferent.png
 
 ![alt tag](https://raw.githubusercontent.com/vkuchinov/dataVisualization/master/DataVisualizations/References/BinaryPlotExample.png)<br><br>
