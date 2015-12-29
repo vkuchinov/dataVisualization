@@ -1,3 +1,4 @@
+
 /*
 
 DATA VISUALIZATION by Wolfram MathWorld Classes
@@ -11,13 +12,14 @@ DATA VISUALIZATION by Wolfram MathWorld Classes
  [-] de Finetti Diagram    [-] Phase Space            [-] Ternary Graph
  [-] Equipotential Curve   [-] Pie Chart              [-] Ternary Plot
  [-] Function Graph        [-] Poincaré Section       [-] Tetraview
- [-] Inside-Outside Plot   [-] Pólya Plot             [-] Triangle Plot
- [-] Level Curve           [-] Recurrence Plot        [-] Tupper's Self-Referent
+ [-] Inside-Outside Plot   [x] Pólya Plot             [-] Triangle Plot
+ [-] Level Curve           [-] Recurrence Plot        [x] Tupper's Self-Referent*
  [-] Level Set             [-] Saunders Graphic       [-] Vector Field
  [-] Level Surface         [-] Scatter Diagram        [-] Web Diagram
  [-] Log-Log Plot          [-] Scatter Plot           [-] World Line
  [-] Log Plot              [-] Scatterplot 
  
+ * Everything formula [Formula of Everything]
  
 NOTES:
 
@@ -40,13 +42,15 @@ void setup(){
   
  size(800, 800, "processing.core.PGraphicsRetina2D"); 
  background(255);
- translate(0, height/2);
+ translate(width/2, height/2);
   
  //BinaryPlot & Euler's Triangle
- EulersTriangle triangle = new EulersTriangle(20);
- for(int r = 1; r < 15; r++){
-   BinaryPlot binary = new BinaryPlot(triangle.getRow(r), 128, 4.0, 8 + 50 * r);
- }
+ //EulersTriangle triangle = new EulersTriangle(20);
+ //for(int r = 1; r < 15; r++){
+ //  BinaryPlot binary = new BinaryPlot(triangle.getRow(r), 128, 4.0, 8 + 50 * r);
+ //}
+ 
+ PolyaPlot polya = new PolyaPlot();
  
  
 }
