@@ -2,6 +2,25 @@
 an ongoing research based on 
 <i>http://mathworld.wolfram.com/topics/DataVisualization.html</i><br><br>
 
+ [-] Anti-Aliasing         [-] Moiré Pattern          [-] Simplex Plot
+ [-] Antialiasing          [-] Ordinate               [-] Slope Field
+ [-] Bar Chart             [-] Phase Curve            [-] Sparkline
+ [x] Binary Plot           [-] Phase Flow             [-] Strang's Strange Figures
+ [-] Cartesian Plot        [-] Phase Plane            [-] Surface of Section
+ [-] Data Cube             [-] Phase Portrait         [-] Ternary Diagram
+ [-] de Finetti Diagram    [-] Phase Space            [-] Ternary Graph
+ [-] Equipotential Curve   [-] Pie Chart              [-] Ternary Plot
+ [-] Function Graph        [-] Poincaré Section       [-] Tetraview
+ [-] Inside-Outside Plot   [-] Pólya Plot             [-] Triangle Plot
+ [-] Level Curve           [-] Recurrence Plot        [-] Tupper's Self-Referent
+ [-] Level Set             [-] Saunders Graphic       [-] Vector Field
+ [-] Level Surface         [-] Scatter Diagram        [-] Web Diagram
+ [-] Log-Log Plot          [-] Scatter Plot           [-] World Line
+ [-] Log Plot              [-] Scatterplot 
+ 
+ [x] done [-] planning
+
+<br><br>
 <b>BinaryPlot & Euler's Triangle Numbers Example</b>
 
 <i>Syntax: BinaryPlot(String[] data_, int dim_, float size_);</i>
