@@ -1,0 +1,64 @@
+/*
+
+ The 'Everything' Formula
+ [Tupper's Self-Referential Formula]
+ 
+ http://en.wikipedia.org/wiki/Tupper%27s_self-referential_formula
+ 
+ k equals the following 543-digit integer:
+ 
+ 960 939 379 918 958 884 971 672 962 127 852 754 715 004 
+ 339 660 129 306 651 505 519 271 702 802 395 266 424 689 
+ 642 842 174 350 718 121 267 153 782 770 623 355 993 237 
+ 280 874 144 307 891 325 963 941 337 723 487 857 735 749 
+ 823 926 629 715 517 173 716 995 165 232 890 538 221 612 
+ 403 238 855 866 184 013 235 585 136 048 828 693 337 902 
+ 491 454 229 288 667 081 096 184 496 091 705 183 454 067 
+ 827 731 551 705 405 381 627 380 967 602 565 625 016 981 
+ 482 083 418 783 163 849 115 590 225 610 003 652 351 370 
+ 343 874 461 848 378 737 238 198 224 849 863 465 033 159 
+ 410 054 974 700 593 138 339 226 497 249 461 751 545 728 
+ 366 702 369 745 461 014 655 997 933 798 537 483 143 786 
+ 841 806 593 422 227 898 388 722 980 000 748 404 719
+ 
+ Based on Numberphile video:
+ https://www.youtube.com/watch?v=_s5RFgd59ao
+ http://web.aanet.com.au/superseed/ajmcrae/TupperPlot/TupperPlot.html
+ 
+ http://en.wikipedia.org/wiki/Modulo_operation
+ 
+*/
+
+import java.math.BigInteger;
+
+static int grid = 4;
+
+String kString = "960939379918958884971672962127852754715004339660129306651505519271702802395266424689642842174350718121267153782770623355993237280874144307891325963941337723487857735749823926629715517173716995165232890538221612403238855866184013235585136048828693337902491454229288667081096184496091705183454067827731551705405381627380967602565625016981482083418783163849115590225610003652351370343874461848378737238198224849863465033159410054974700593138339226497249461751545728366702369745461014655997933798537483143786841806593422227898388722980000748404719";
+
+BigInteger k;
+
+void setup(){
+
+  size(200*grid, 80*grid);  
+  background(255);
+  
+  k = new BigInteger(kString);
+
+  for(int y = 0; y < 17 ; y++){
+   for(int x = 0; x < 160; x++){
+   
+   boolean pixel = false;
+   
+   BigInteger yy = new BigInteger("" + (int) y); yy = yy.add(k);
+   BigInteger xx = new BigInteger("" + (int) x);
+    
+   //master formula
+   if(0.5 < yy.divideAndRemainder(BigInteger.valueOf(17))[0].divideAndRemainder(BigInteger.valueOf(2).pow(BigInteger.valueOf(17).multiply(xx).add(yy.mod(BigInteger.valueOf(17))).intValue()))[0].mod(BigInteger.valueOf(2)).doubleValue()) pixel = true; 
+   noStroke();
+   if(pixel) fill(0); else fill(255);
+   rectMode(CENTER);
+   rect(120*4 - x*4, 40 + y*4, 4, 4); 
+   }
+  }
+}
+
