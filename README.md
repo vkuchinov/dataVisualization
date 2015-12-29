@@ -94,7 +94,7 @@ see reference image @ /References/BinaryPlotExample.png
 
 <br>
 <b>Tupper's Self-Referent</b><br>
-<i>Everything Formula | Formula of Everything<i>
+<i>The Everything Formula | The Formula of Everything<i>
 
 <i>Syntax: EverythingFormula();</i>
 
