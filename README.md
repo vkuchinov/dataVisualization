@@ -90,4 +90,4 @@ an ongoing research based on
 Excellent visualization for symetric number sequences like Euler's Triangle Numbers, Losanitsch's Triangle or Pascal's Triangle...
 see reference image @ /References/BinaryPlotExample.png
 
-![alt tag](https://raw.github.com/username/projectname/branch/path/to/img.png)<br><br>
+![alt tag](https://raw.githubusercontent.com/vkuchinov/dataVisualization/master/DataVisualizations/References/BinaryPlotExample.png)<br><br>
