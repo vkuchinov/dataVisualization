@@ -2,104 +2,87 @@
 an ongoing research based on 
 <i>http://mathworld.wolfram.com/topics/DataVisualization.html</i><br><br>
 
- [-] Anti-Aliasing         [-] Moiré Pattern          [-] Simplex Plot
- [-] Antialiasing          [-] Ordinate               [-] Slope Field
- [-] Bar Chart             [-] Phase Curve            [-] Sparkline
- [x] Binary Plot           [-] Phase Flow             [-] Strang's Strange Figures
- [-] Cartesian Plot        [-] Phase Plane            [-] Surface of Section
- [-] Data Cube             [-] Phase Portrait         [-] Ternary Diagram
- [-] de Finetti Diagram    [-] Phase Space            [-] Ternary Graph
- [-] Equipotential Curve   [-] Pie Chart              [-] Ternary Plot
- [-] Function Graph        [-] Poincaré Section       [-] Tetraview
- [-] Inside-Outside Plot   [-] Pólya Plot             [-] Triangle Plot
- [-] Level Curve           [-] Recurrence Plot        [-] Tupper's Self-Referent
- [-] Level Set             [-] Saunders Graphic       [-] Vector Field
- [-] Level Surface         [-] Scatter Diagram        [-] Web Diagram
- [-] Log-Log Plot          [-] Scatter Plot           [-] World Line
- [-] Log Plot              [-] Scatterplot 
- 
- <table border="0" style="background-color:#FFFFFF;border-collapse:collapse;border:0px solid #FFCC00;color:#000000;width:520" cellpadding="0" cellspacing="0">
+<table border="0" style="background-color:#FFFFFF;border-collapse:collapse;border:0px solid #FFCC00;color:#000000;width:520" cellpadding="0" cellspacing="0">
 	<tr>
-		<td>Table Cell</td>
-		<td>Table Cell</td>
-		<td>Table Cell</td>
+		<td>[-] Anti-Aliasing</td>
+		<td>[-] Moiré Pattern</td>
+		<td>[-] Simplex Plot</td>
 	</tr>
 	<tr>
-		<td>Table Cell</td>
-		<td>Table Cell</td>
-		<td>Table Cell</td>
+		<td>[-] Antialiasing</td>
+		<td>[-] Ordinate</td>
+		<td>[-] Slope Field</td>
 	</tr>
 	<tr>
-		<td>Table Cell</td>
-		<td>Table Cell</td>
-		<td>Table Cell</td>
+		<td>[-] Bar Chart</td>
+		<td>[-] Phase Curve</td>
+		<td>[-] Sparkline</td>
 	</tr>
 	<tr>
-		<td>Table Cell</td>
-		<td>Table Cell</td>
-		<td>Table Cell</td>
+		<td>[x] Binary Plot</td>
+		<td>[-] Phase Flow</td>
+		<td>[-] Strang's Strange Figures</td>
 	</tr>
 	<tr>
-		<td>Table Cell</td>
-		<td>Table Cell</td>
-		<td>Table Cell</td>
+		<td>[-] Cartesian Plot</td>
+		<td>[-] Phase Plane</td>
+		<td>[-] Surface of Section</td>
 	</tr>
 	<tr>
-		<td>Table Cell</td>
-		<td>Table Cell</td>
-		<td>Table Cell</td>
+		<td>[-] Data Cube</td>
+		<td>[-] Phase Portrait</td>
+		<td>[-] Ternary Diagram</td>
 	</tr>
 	<tr>
-		<td>Table Cell</td>
-		<td>Table Cell</td>
-		<td>Table Cell</td>
+		<td>[-] de Finetti Diagram</td>
+		<td>[-] Phase Space</td>
+		<td>[-] Ternary Graph</td>
 	</tr>
 	<tr>
-		<td>Table Cell</td>
-		<td>Table Cell</td>
-		<td>Table Cell</td>
+		<td>[-] Equipotential Curve</td>
+		<td>[-] Pie Chart</td>
+		<td>[-] Ternary Plot</td>
 	</tr>
 	<tr>
-		<td>Table Cell</td>
-		<td>Table Cell</td>
-		<td>Table Cell</td>
+		<td>[-] Function Graph</td>
+		<td>[-] Poincaré Section</td>
+		<td>[-] Tetraview</td>
 	</tr>
 	<tr>
-		<td>Table Cell</td>
-		<td>Table Cell</td>
-		<td>Table Cell</td>
+		<td>[-] Inside-Outside Plot</td>
+		<td>[-] Pólya Plot</td>
+		<td>[-] Triangle Plot</td>
 	</tr>
 	<tr>
-		<td>Table Cell</td>
-		<td>Table Cell</td>
-		<td>Table Cell</td>
+		<td>[-] Level Curve</td>
+		<td>[-] Recurrence Plot</td>
+		<td>[-] Tupper's Self-Referent</td>
 	</tr>
 	<tr>
-		<td>Table Cell</td>
-		<td>Table Cell</td>
-		<td>Table Cell</td>
+		<td>[-] Level Set</td>
+		<td>[-] Saunders Graphic</td>
+		<td>[-] Vector Field</td>
 	</tr>
 	<tr>
-		<td>Table Cell</td>
-		<td>Table Cell</td>
-		<td>Table Cell</td>
+		<td>[-] Level Surface</td>
+		<td>[-] Scatter Diagram</td>
+		<td>[-] Web Diagram</td>
 	</tr>
 	<tr>
-		<td>Table Cell</td>
-		<td>Table Cell</td>
-		<td>Table Cell</td>
+		<td>[-] Log-Log Plot</td>
+		<td>[-] Scatter Plot</td>
+		<td>[-] World Line</td>
 	</tr>
 	<tr>
-		<td>Table Cell</td>
-		<td>Table Cell</td>
-		<td>Table Cell</td>
+		<td>[-] Log Plot</td>
+		<td>[-] Scatterplot</td>
+		<td></td>
 	</tr>
 </table>
 
-
  [x] done [-] planning
 
-<br><br>
+<br>
 <b>BinaryPlot & Euler's Triangle Numbers Example</b>
 
 <i>Syntax: BinaryPlot(String[] data_, int dim_, float size_);</i>
