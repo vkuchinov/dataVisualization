@@ -41,7 +41,7 @@ an ongoing research based on
 	<tr>
 		<td>[-] Equipotential Curve</td>
 		<td>[-] Pie Chart</td>
-		<td>[-] Ternary Plot</td>
+		<td>[!] Ternary Plot</td>
 	</tr>
 	<tr>
 		<td>[-] Function Graph</td>
@@ -80,7 +80,7 @@ an ongoing research based on
 	</tr>
 </table>
 
- [x] done [-] planning
+ [x] done [!] work in progress [-] planning
 
 <br>
 <b>BinaryPlot & Euler's Triangle Numbers Example</b>
