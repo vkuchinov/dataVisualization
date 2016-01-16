@@ -60,7 +60,7 @@ an ongoing research based on
 	</tr>
 	<tr>
 		<td>[-] Level Set</td>
-		<td>[-] Saunders Graphic</td>
+		<td>[x] Saunders Graphic</td>
 		<td>[-] Vector Field</td>
 	</tr>
 	<tr>
@@ -129,3 +129,9 @@ The result of function is represented by Z axis.<br>
 
 ![alt tag](https://raw.githubusercontent.com/vkuchinov/dataVisualization/master/DataVisualizations/ComplexPlane2D/screenshot.png)<br>
 ![alt tag](https://raw.githubusercontent.com/vkuchinov/dataVisualization/master/DataVisualizations/ComplexPlane3D/screenshot.png)<br><br>
+
+<br>
+<b>Saunder's Graphics [Plot]</b><br>
+<i>a binary plot<i>
+
+![alt tag](https://raw.githubusercontent.com/vkuchinov/dataVisualization/master/DataVisualizations/SaundersGraphics/screenshot.png)<br><br>
