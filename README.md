@@ -76,7 +76,7 @@ an ongoing research based on
 	<tr>
 		<td>[-] Log Plot</td>
 		<td>[-] Scatter Plot</td>
-		<td>[!] Complex Plot</td>
+		<td>[x] Complex Plot</td>
 	</tr>
 </table>
 
@@ -115,5 +115,16 @@ A self-referented plot. Displays original formula with this dataset of 543 integ
 841 806 593 422 227 898 388 722 980 000 748 404 719<br></i>
 <br>
 see reference image @ /References/TuppersSelfReferent.png
+
+![alt tag](https://raw.githubusercontent.com/vkuchinov/dataVisualization/master/DataVisualizations/References/TuppersSelfReferent.png)<br><br>
+
+<br>
+<b>Complex Plot 2D / 3D</b><br>
+<i>implementation of complex plots<i>
+
+<br><br>In complex plot X axis equals to Re (real part) and Y axis to Im (imaginary part).
+The result of function is represented by Z axis.<br><br>
+ 
+<i>Syntax: ComplexPlot(dimension, # of points [density], float[]{ minX, maxX},  float[]{ minY, maxY});</i>
 
 ![alt tag](https://raw.githubusercontent.com/vkuchinov/dataVisualization/master/DataVisualizations/References/TuppersSelfReferent.png)<br><br>
