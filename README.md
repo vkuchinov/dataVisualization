@@ -41,7 +41,7 @@ an ongoing research based on
 	<tr>
 		<td>[-] Equipotential Curve</td>
 		<td>[-] Pie Chart</td>
-		<td>[!] Ternary Plot</td>
+		<td>[-] Ternary Plot</td>
 	</tr>
 	<tr>
 		<td>[-] Function Graph</td>
@@ -75,7 +75,8 @@ an ongoing research based on
 	</tr>
 	<tr>
 		<td>[-] Log Plot</td>
-		<td>[-] Scatterplot</td>
+		<td>[-] Scatter Plot</td>
+		<td>[!] Complex Plot</td>
 		<td></td>
 	</tr>
 </table>
