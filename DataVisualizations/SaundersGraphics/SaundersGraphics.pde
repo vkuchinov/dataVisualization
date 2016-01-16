@@ -64,15 +64,35 @@ SAMPLE
               
     RealDigits[PI, 10, 25] 10 is base, 25: # of numbers
               {{3, 1, 4, 1, 5, 9, 2, 6, 5, 3, ..., 4, 3}, 1} 
+              
+    RealDigits[x, b, len, n] gives len digits starting with the coefficient of bⁿ
+    
+    adds n of 0 before
+    
+    RealDigits[PI, 10, 25, 2] 
+              {{0, 0, 3, 1, 4, 1, 5, 9, 2, 6, 5, 3, ..., 2, 6}, 1} 
+              
+    RealDigits[PI, 10, 2] // {{3, 1}, 1}
+    
+    RealDigits[PI, 2, 2]  // {{1, 1}, 2}
+    
+                             {{....}, decimal point}
+                             
+     
+              
 
 Saunders couldbe used to create a vareity of vector fields 
 for further experiments.
 
 REFERENCES: 
+https://en.wikipedia.org/wiki/Combination
+
 http://comjnl.oxfordjournals.org/content/15/2/160.full.pdf
 http://mathworld.wolfram.com/SaundersGraphic.html
 http://functions.wolfram.com/ElementaryFunctions/Sin/visualizations/18/
-http://functions.wolfram.com/ElementaryFunctions/Sin/visualizations/18/
+http://functions.wolfram.com/ElementaryFunctions/ArcCos/visualizations/18/
+http://search.wolfram.com/ancient/?query=Saunders+graphics&collection=functions&lang=en
+
 http://demonstrations.wolfram.com/SaundersDigitGraphics/
 
 @author  Vladimir V. KUCHINOV
@@ -85,11 +105,20 @@ int[] d = {1, 2, 3};
 
 void setup(){
   
-   size(800, 800); 
-   
-   for(double y = -PI; y < PI; y += 0.02){
-     for(double x = -PI; x < PI; x += 0.02){
+   size(700, 700, "processing.core.PGraphicsRetina2D"); 
+   background(0);
+   noStroke();
+     
+   for(double y = -PI + 0.02; y < PI; y += 0.02){
+     for(double x = -PI + 0.02; x < PI; x += 0.02){
        
+       //z should be binary 0 or 1, white or black
+       Complex out = new Complex(x, y).sin();
+       
+       //RealDigits(result, base, length, -d, element)
+       int state = RealDigits(out.re(), 2, 2, -1, 0);
+       if(state == 0) { fill(255); } else { fill(0); }
+       rect(350 + (float)x * 100, 350 + (float)y * 100, 2, 2);
      }
    }
   
