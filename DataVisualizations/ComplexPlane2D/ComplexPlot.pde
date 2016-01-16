@@ -77,6 +77,25 @@ class ComplexPlot{
         
    }
    
+   void displayAsVectorField(){
+     
+        println(minZ, maxZ);
+        colorMode(HSB);
+        float dim = plotWidth / points;
+        
+        for(int y = 0; y < plot.length; y++){
+          for(int x = 0; x < plot.length; x++){
+            
+            stroke(255, 0, 255);
+            float xx = offsetX + x * dim + cos(radians(map(plot[x][y], minZ, maxZ, 0, 360))) * 3.0;
+            float yy = offsetX + y * dim + sin(radians(map(plot[x][y], minZ, maxZ, 0, 360))) * 3.0;
+            line(offsetX + x * dim, offsetY + y * dim, xx, yy);
+
+          }
+        }
+        
+   }
+   
    void exportData(String url_){
          
         String[] output = new String[plot.length];

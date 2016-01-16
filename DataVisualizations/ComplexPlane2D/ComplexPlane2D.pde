@@ -21,10 +21,11 @@ void setup(){
   background(0);
   noStroke();
   
-  plot = new ComplexPlot(600, 200, new float[]{-2 * PI, 2 * PI}, new float[]{-2 * PI, 2 * PI});
+  plot = new ComplexPlot(600, 96, new float[]{-2 * PI, 2 * PI}, new float[]{-2 * PI, 2 * PI});
   plot.offset(50, 50);
   plot.display();
+  //plot.displayAsVectorField();
   
-  plot.exportData("output.txt");
+  //plot.exportData("output.txt");
  
 }

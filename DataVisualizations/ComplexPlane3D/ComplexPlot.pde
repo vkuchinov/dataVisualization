@@ -35,7 +35,7 @@ class ComplexPlot3D{
                 Complex z = c.sin();
                 
                 //Re(sin[z])
-                float result = (float)z.im();
+                float result = (float)z.re();
                 
                 this.set(x, y, result);
               
@@ -65,12 +65,18 @@ class ComplexPlot3D{
         colorMode(HSB);
         float dim = plotWidth / points;
         
-        for(int y = 0; y < plot.length; y++){
-          for(int x = 0; x < plot.length; x++){
+        for(int y = 1; y < plot.length; y++){
+          for(int x = 1; x < plot.length; x++){
             
             noStroke();
-            new IPoint(offsetX + x * dim, offsetY + y * dim, offsetX + map(plot[x][y], minZ, maxZ, 0, 255)).hsb(map(plot[x][y], minZ, maxZ, 0, 1.0), 0.8, 0.8);;       
-          }
+            IVec pt0 = new IVec(offsetX + (x - 1) * dim, offsetY + (y - 1) * dim, map(plot[x - 1][y - 1], minZ, maxZ, -50, 50));
+            IVec pt1 = new IVec(offsetX + (x - 1) * dim, offsetY + (y) * dim, map(plot[x - 1][y], minZ, maxZ, -50, 50));
+            IVec pt2 = new IVec(offsetX + (x) * dim, offsetY + (y - 1) * dim, map(plot[x][y - 1], minZ, maxZ, -50, 50));
+            IVec pt3 = new IVec(offsetX + x * dim, offsetY + y * dim, map(plot[x][y], minZ, maxZ, -50, 50));
+            
+            new ISurface(pt0, pt1, pt2, pt3).hsb(map(plot[x][y], minZ, maxZ, 0, 1.0), 0.8, 0.8);
+            
+          } 
         }
         
    }

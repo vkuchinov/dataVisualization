@@ -25,7 +25,7 @@ void setup(){
   IG.background(0);
   IG.perspective();
   
-  plot = new ComplexPlot3D(600, 200, new float[]{-2 * PI, 2 * PI}, new float[]{-2 * PI, 2 * PI});
+  plot = new ComplexPlot3D(600, 64, new float[]{-2 * PI, 2 * PI}, new float[]{-2 * PI, 2 * PI});
   plot.offset(-150, -150);
   plot.display();
   
