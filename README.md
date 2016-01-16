@@ -123,7 +123,7 @@ see reference image @ /References/TuppersSelfReferent.png
 <i>implementation of complex plots<i>
 
 <br><br>In complex plot X axis equals to Re (real part) and Y axis to Im (imaginary part).
-The result of function is represented by Z axis.<br><br>
+The result of function is represented by Z axis.<br>
  
 <i>Syntax: ComplexPlot(dimension, # of points [density], float[]{ minX, maxX},  float[]{ minY, maxY});</i>
 
