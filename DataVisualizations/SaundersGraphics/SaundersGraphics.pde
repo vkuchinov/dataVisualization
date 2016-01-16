@@ -117,7 +117,7 @@ void setup(){
        
        //RealDigits(result, base, length, -d, element)
        int state = RealDigits(out.re(), 2, 2, -1, 0);
-       if(state == 0) { fill(255); } else { fill(0); }
+       if(state == 0) { fill(0); } else { fill(255); }
        rect(350 + (float)x * 100, 350 + (float)y * 100, 2, 2);
      }
    }
