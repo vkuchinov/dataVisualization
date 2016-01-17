@@ -75,7 +75,7 @@ an ongoing research based on
 	</tr>
 	<tr>
 		<td>[-] Log Plot</td>
-		<td>[-] Scatter Plot</td>
+		<td>[-] Scatterplott</td>
 		<td>[x] Complex Plot</td>
 	</tr>
 </table>
