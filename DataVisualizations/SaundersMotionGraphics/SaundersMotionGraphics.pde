@@ -100,27 +100,57 @@ http://demonstrations.wolfram.com/SaundersDigitGraphics/
 
 */
 
-int b = 2;
-int[] d = {1, 2, 3};
+String dataA[], dataB[], dataC[], lineA[], lineB[], lineC[];
+int frame = 0;
 
 void setup(){
   
-   size(700, 700, "processing.core.PGraphicsRetina2D"); 
+   size(700, 700); 
+   frameRate(6);
+   
+   dataA = loadStrings("data1.txt");
+   dataB = loadStrings("data2.txt");
+   dataC = loadStrings("data3.txt");
+   
    background(0);
    noStroke();
      
-   for(double y = -PI; y < PI; y += 0.02){
-     for(double x = -PI; x < PI; x += 0.02){
-       
-       //z should be binary 0 or 1, white or black
-       Complex out = new Complex(x, y).sin();
-       
-       //RealDigits(result, base, length, -d, element)
-       int state = RealDigits(out.re(), 2, 2, -1, 0);
-       if(state == 0) { fill(0); } else { fill(255); }
-       rect(350 + (float)x * 100, 350 + (float)y * 100, 2, 2);
-     }
-   }
+}
+
+void draw(){
   
+  background(0);
+  
+  for(int y = 0; y < dataA.length; y++){
+     
+     lineA = split(dataA[y], ",");
+     lineB = split(dataB[y], ",");
+     lineC = split(dataC[y], ",");
+     
+     for(int x = 0; x < dataA.length; x++){
+       
+       float result = 0.0;
+       
+       float A = Float.parseFloat(lineA[x]);
+       float B = Float.parseFloat(lineB[x]);
+       float C = Float.parseFloat(lineC[x]);
+       
+       int innerFrame = frame % 40;
+       
+       if(frame < 40) result = lerp(A, B, 1.0 / 40.0 * innerFrame);
+       if(frame > 39 && frame < 80) result = lerp(B, C, 1.0 / 40.0 * innerFrame);
+       if(frame > 79) result = lerp(C, A, 1.0 / 40.0 * innerFrame);
+       
+       int state = RealDigits(result, 2, 2, -1, 0);
+       
+       if(state == 0) { fill(0); } else { fill(255); }
+       rect(50 + x * 2, 50 + y * 2, 2, 2);
+       
+     }    
+   }
+   
+   save("frame" + frame + ".jpg");
+   if(frame > 119) { noLoop(); } else { frame++; }
+    
 }
 
