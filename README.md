@@ -39,7 +39,7 @@ an ongoing research based on
 		<td>[-] Ternary Graph</td>
 	</tr>
 	<tr>
-		<td>[-] Equipotential Curve</td>
+		<td>[!] Equipotential Curve</td>
 		<td>[-] Pie Chart</td>
 		<td>[-] Ternary Plot</td>
 	</tr>
