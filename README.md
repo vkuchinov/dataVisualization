@@ -135,3 +135,9 @@ The result of function is represented by Z axis.<br>
 <i>a binary plot<i>
 
 ![alt tag](https://raw.githubusercontent.com/vkuchinov/dataVisualization/master/DataVisualizations/SaundersGraphics/screenshot.png)<br><br>
+
+<br>
+<b>Equipotential Plot</b><br>
+<i>based on equipotential curves<i>
+
+![alt tag](https://raw.githubusercontent.com/vkuchinov/dataVisualization/master/DataVisualizations/EquipotentialPlots/screenshot.png)<br><br>
