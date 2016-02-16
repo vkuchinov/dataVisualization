@@ -50,7 +50,7 @@ an ongoing research based on
 	</tr>
 	<tr>
 		<td>[-] Inside-Outside Plot</td>
-		<td>[-] Pólya Plot</td>
+		<td>[x] Pólya Plot</td>
 		<td>[-] Triangle Plot</td>
 	</tr>
 	<tr>
