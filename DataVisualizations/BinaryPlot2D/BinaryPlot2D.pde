@@ -42,15 +42,13 @@ void setup(){
   
  size(800, 800, "processing.core.PGraphicsRetina2D"); 
  background(255);
- translate(width/2, height/2);
+ translate(0, height/2);
   
  //BinaryPlot & Euler's Triangle
- //EulersTriangle triangle = new EulersTriangle(20);
- //for(int r = 1; r < 15; r++){
- //  BinaryPlot binary = new BinaryPlot(triangle.getRow(r), 128, 4.0, 8 + 50 * r);
- //}
- 
- PolyaPlot polya = new PolyaPlot();
- 
+ EulersTriangle triangle = new EulersTriangle(20);
+ for(int r = 1; r < 15; r++){
+   BinaryPlot binary = new BinaryPlot(triangle.getRow(r), 128, 4.0, 8 + 50 * r);
+ }
+
  
 }

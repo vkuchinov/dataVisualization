@@ -6,6 +6,8 @@ import java.util.List;
 
 class Graph{
   
+       final float PRECISION = 1.5;
+       
        ArrayList<Node> nodes; 
        PVector[] connections;
        
@@ -17,9 +19,12 @@ class Graph{
      
            nodes = new ArrayList<Node>();
            
+           String[] names = loadStrings("data/names.txt");
+           int len = names.length;
+           
            for (int p = 0; p < xmlPoints.length; p++) {
              
-                nodes.add(new Node(p, Float.parseFloat(xmlPoints[p].getString("cx")), Float.parseFloat(xmlPoints[p].getString("cy")))); 
+                nodes.add(new Node(p, names[(int)random(len - 1)], Float.parseFloat(xmlPoints[p].getString("cx")), Float.parseFloat(xmlPoints[p].getString("cy")))); 
              
            }
            
@@ -53,8 +58,8 @@ class Graph{
          
             for(int n = 0; n < nodes.size(); n++){
               
-                  if(PVector.dist(p0, nodes.get(n)) < 1.5) output[0] = n;
-                  if(PVector.dist(p1, nodes.get(n)) < 1.5) output[1] = n;
+                  if(PVector.dist(p0, nodes.get(n)) < PRECISION) output[0] = n;
+                  if(PVector.dist(p1, nodes.get(n)) < PRECISION) output[1] = n;
               
             }
             return output; 
@@ -86,6 +91,7 @@ class NodeList extends ArrayList{
 class Node extends PVector{
   
    int index;
+   String name;
   
    Node(int i_, float x_, float y_){
      
@@ -93,7 +99,15 @@ class Node extends PVector{
      x = x_; y = y_;
      
    }
+    
+   Node(int i_, String name_, float x_, float y_){
      
+     index = i_;
+     x = x_; y = y_;
+     name = name_;
+     
+   }
+   
    Node(int i_, float x_, float y_, float z_){
     
      index = i_;

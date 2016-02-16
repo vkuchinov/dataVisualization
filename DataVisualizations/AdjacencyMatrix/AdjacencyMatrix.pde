@@ -20,6 +20,7 @@ http://mathworld.wolfram.com/ResistanceDistance.html
 
 */
 
+import processing.pdf.*;
 import java.util.Random;
 
 ArrayList<PVector> points = new ArrayList<PVector>();
@@ -29,11 +30,17 @@ final String URL = "data/BarnetteGraph.svg";
 
 void setup(){
   
-     size(600, 600, "processing.core.PGraphicsRetina2D"); 
+     //problems with size
+     size(750, 800, "processing.core.PGraphicsRetina2D"); 
+     background(255);
+     beginRecord(PDF, "output.pdf");
      
      Graph g = new Graph(URL);
+     println(g.nodes.size());
      
      Adjacency matrix = new Adjacency(50, 50, 500, g);
      matrix.draw();
+     
+     endRecord();
      
 }

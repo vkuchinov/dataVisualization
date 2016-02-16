@@ -34,20 +34,63 @@ class Adjacency{
            rect(x, y, w, h);
            
            for(int j = 0; j < g.nodes.size(); j++){
-               for(int i = 0; i < g.nodes.size(); i++){
+             
+               strokeWeight(0.5);
+               stroke(0);
+               
+               line(50, 24 + 18 * j, 300, 24 + 18 * j);
+               line(300, 24 + 18 * j, 309, 24 + 9 + 18 * j);
+               line(309, 24 + 9 + 18 * j, 300, 24 + 18 + 18 * j); 
+               
+               if(j != 0) line(309, 24 + 9 - 18 + 18 * j, 309 + (9 * g.nodes.size() - (j - 1) * 9) - 9, 24 + (18*(g.nodes.size()+1))/2.0 + 18 * j - j * 9 - 18);
+               line(309, 24 + 9 - 18 + 18 * j + 18, 309 + (j * 9), 24 + 18 * j - j * 9 + 9);
+               
+               fill(0);
+               noStroke();
+               textSize(9);
+               textAlign(RIGHT, CENTER);
+               text(g.nodes.get(j).name, 300, 32 + 18 * j);
+               stroke(0);
+               noFill();
+                
+               for(int i = j + 1; i < g.nodes.size(); i++){
                  
-                      //PVector p1 = points.get(i);
-                      //PVector p2 = points.get(j);
-                      fill(255);
-                      if(j == i) fill(255);
-                      for(int c = 0; c < g.connections.length; c++){
-                          if((g.connections[c].x == j && g.connections[c].y == i) || (g.connections[c].x == i && g.connections[c].y == j)) fill(0);
-                      }
-                      rect(x + i * step, y + j * step, step, step);
-                 
+                      noFill();
+                      //if(i <= j){
+                  
+                    
+                      if(i != j && checkConnection(g.nodes.get(i), g.nodes.get(j))) strokeWeight(8.0); else strokeWeight(2.5);
+                      point(300 + i * 9 - j*9 , 33 + j * 9 + i * 9);
+
+                      //fill(0);
+                      //noStroke();
+                      //textSize(4);
+                      //textAlign(CENTER, CENTER);
+                      //text(j + ", " + i, 300 + i * 9 - j*9 , 33 + j * 9 + i * 9);
+                      //text(i + ", " + j, 318 + i * 18, 33 + 18 + j * 18);
+                      
                }
            }
        
+           stroke(0);
+           strokeWeight(0.5);
+           line(50, 24, 300, 24);
+           line(300, 6 + 18, 309, 6 + 9 + 18);
+           line(309, 6 + 9 + 18, 300, 6 + 18 + 18);
+           line(50, 24 + 18 * g.nodes.size(), 300, 24 + 18 * g.nodes.size());
+          
+     }
+     
+     boolean checkConnection(Node n1, Node n2){
+       
+           for(int c = 0; c < g.connections.length; c++){
+            
+                if((n1.index == (int)g.connections[c].x && n2.index == (int)g.connections[c].y) || ((n2.index == (int)g.connections[c].x && n1.index == (int)g.connections[c].y))) return true; 
+             
+           }
+       
+           return false;
+           
      }
 
 }
