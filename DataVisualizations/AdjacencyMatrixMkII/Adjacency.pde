@@ -47,27 +47,28 @@ class Adjacency{
                
                fill(0);
                noStroke();
+               textSize(9);
                textAlign(RIGHT, CENTER);
                text(g.nodes.get(j).name, 300, 32 + 18 * j);
                stroke(0);
                noFill();
                 
-               for(int i = 0; i < g.nodes.size(); i++){
+               for(int i = j + 1; i < g.nodes.size(); i++){
                  
-                      strokeWeight(3.0);
                       noFill();
                       //if(i <= j){
-                      if(i <= j) {
-                      //i
-                      colorMode(HSB);
-                      stroke(map(i, 0, 37, 0, 255), 240, 240);
-                      point(309 + i * 18 - 2, 24 + 18 + j * 18);
-                      point(318 + i * 18 - 2, 33 + 18 + j * 18);
-                      //j
-                      stroke(map(j, 0, 37, 0, 255), 240, 240);
-                      point(309 + i * 18 + 2, 24 + 18 + j * 18);
-                      point(318 + i * 18 + 2, 33 + 18 + j * 18);
-                      }
+                  
+                    
+                      if(i != j && checkConnection(g.nodes.get(i), g.nodes.get(j))) strokeWeight(8.0); else strokeWeight(2.5);
+                      point(300 + i * 9 - j*9 , 33 + j * 9 + i * 9);
+
+                      //fill(0);
+                      //noStroke();
+                      //textSize(4);
+                      //textAlign(CENTER, CENTER);
+                      //text(j + ", " + i, 300 + i * 9 - j*9 , 33 + j * 9 + i * 9);
+                      //text(i + ", " + j, 318 + i * 18, 33 + 18 + j * 18);
+                      
                }
            }
        
@@ -78,6 +79,18 @@ class Adjacency{
            line(309, 6 + 9 + 18, 300, 6 + 18 + 18);
            line(50, 24 + 18 * g.nodes.size(), 300, 24 + 18 * g.nodes.size());
           
+     }
+     
+     boolean checkConnection(Node n1, Node n2){
+       
+           for(int c = 0; c < g.connections.length; c++){
+            
+                if((n1.index == (int)g.connections[c].x && n2.index == (int)g.connections[c].y) || ((n2.index == (int)g.connections[c].x && n1.index == (int)g.connections[c].y))) return true; 
+             
+           }
+       
+           return false;
+           
      }
 
 }
