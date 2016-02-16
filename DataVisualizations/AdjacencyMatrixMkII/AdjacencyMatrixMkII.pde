@@ -29,9 +29,11 @@ final String URL = "data/BarnetteGraph.svg";
 
 void setup(){
   
-     size(600, 600, "processing.core.PGraphicsRetina2D"); 
+     size(680, 750, "processing.core.PGraphicsRetina2D"); 
+     background(255);
      
      Graph g = new Graph(URL);
+     println(g.nodes.size());
      
      Adjacency matrix = new Adjacency(50, 50, 500, g);
      matrix.draw();

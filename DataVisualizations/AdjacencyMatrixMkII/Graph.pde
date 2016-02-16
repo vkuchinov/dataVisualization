@@ -17,9 +17,12 @@ class Graph{
      
            nodes = new ArrayList<Node>();
            
+           String[] names = loadStrings("data/names.txt");
+           int len = names.length;
+           
            for (int p = 0; p < xmlPoints.length; p++) {
              
-                nodes.add(new Node(p, Float.parseFloat(xmlPoints[p].getString("cx")), Float.parseFloat(xmlPoints[p].getString("cy")))); 
+                nodes.add(new Node(p, names[(int)random(len - 1)], Float.parseFloat(xmlPoints[p].getString("cx")), Float.parseFloat(xmlPoints[p].getString("cy")))); 
              
            }
            
@@ -86,6 +89,7 @@ class NodeList extends ArrayList{
 class Node extends PVector{
   
    int index;
+   String name;
   
    Node(int i_, float x_, float y_){
      
@@ -93,7 +97,15 @@ class Node extends PVector{
      x = x_; y = y_;
      
    }
+    
+   Node(int i_, String name_, float x_, float y_){
      
+     index = i_;
+     x = x_; y = y_;
+     name = name_;
+     
+   }
+   
    Node(int i_, float x_, float y_, float z_){
     
      index = i_;

@@ -1,0 +1,207 @@
+Agrale
+Bernardini
+Brasinca
+Dacon
+DKW-Vemag
+Emme
+Engesa
+Fábrica Nacional de Motores
+Gurgel Motores
+Hofstetter Turbo
+JPX do Brasil Ltda.
+Lobini
+Obvio
+Pag
+Puma
+Santa Matilde
+Simca do Brasil
+Sta Milde
+Tecnologia Automotiva Catarinense
+Troller
+Beiqi
+BAW
+Brilliance Auto Group
+BYD
+Chang’an Automobile Group
+Changhe
+Hafei
+Chery Automobile Co
+Dadi Auto
+Dongfeng Motor Corporation
+Everus (Li Nian)
+FAW Group Corporation
+HAIMA
+FAW Tianjin
+Foton Motor
+Huali
+Hongqi
+Geely
+Gonow
+Great Wall Motors Company Limited
+GAIG
+GAC Group
+GAC Changfeng Motor
+Hawtai
+ZX Auto
+Huayang
+JAC Motors
+Jiangling Motors Corporation
+Lifan
+Qoros Auto Co
+Roewe
+Shaanxi Automobile Group
+Shanghai Maple Guorun Automobile Co
+SAIC Motor Corporation
+Sichuan Tengzhong
+Shuanghuan Auto
+SG Automotive Group
+Soueast
+Xinkai
+Youngman
+Yue Lo0ng
+Yutong
+Polarsun Automobile
+Zhonghua
+Zotye Auto
+Aixam-Mega
+Alma
+Alpine
+Amilcar
+Arista
+Arola SARL
+Autobleu
+Autovia
+Auverland
+Ballot
+Bollée
+Bolloré
+Bucciali
+Bugatti
+CG
+Chenard-Walcker
+Citroën
+Claveau
+Cottin-Desgouttes
+Darracq
+Darracq Lago
+DB
+De Dietrich
+De Dion Bouton
+Delage
+Delahaye
+DeLaChapelle
+Exagon Engineering
+Facel Vega
+Gregoire
+Heuliez
+Hotchkiss
+Hurtu
+Isatis
+La Buire
+Léon Bollée
+Le Zebre
+Licorne
+Ligier
+Lombard
+Lorraine
+Lorraine Dietrich
+Matra
+Matra Bonnet
+Matra-Simca
+Matra-Talbot
+Mécanique Aviation Traction
+Mega
+Monica
+MDI
+MVS
+Microcar
+Panhard
+Peugeot
+PGO Automobiles
+Renault
+Rochet-Schneider
+Salmson
+Simca
+Simca Vedette
+Sovam
+Talbot
+Th. Schneider
+Tracta
+Turcat-Méry
+Unic
+Vaillante
+Venturi
+Vermorel
+Vernon-Derby
+Vespa
+Voisin
+Zédel
+Adler
+Amphicar
+Artega
+Audi
+Auto-Union
+Apal
+Artega Automobil GmbH
+AWZ-Zwickau
+BUS
+B+B
+Bitter
+BMW
+Borgward
+Brennabor-Werke
+Brütsch
+Champion
+Daimler
+Dauer
+Dürkopp
+Dixi
+DKW
+Espenlaub
+Fafnir
+Fuldamobil
+Glas
+Goggomobil
+Goliath
+Gumpert
+Gutbrod
+Hanomag
+Heinkel
+Horch
+Irmscher
+Isdera
+Karmann
+Kleinschnittger
+Koenig
+Lloyd
+Lotec
+Lutzmann
+Magna Steyr
+Maico
+Maybach
+MCC
+Melkus
+Mercedes-Benz
+Messerschmitt
+Markranstädter Automobilfabrik
+NAG
+NSU
+Opel
+Pinguin
+Porsche
+Ruf Automobile GmbH
+Rumpler
+Smart
+Stoewer
+Trabant
+Treser
+Vauxhall
+Victoria
+Volkswagen
+Wanderer
+Wartburg
+Wendax
+Wiesmann
+Yes!
+Zender
+Zundapp
