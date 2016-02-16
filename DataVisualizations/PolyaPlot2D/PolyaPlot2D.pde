@@ -33,6 +33,10 @@ NOTES:
 REFERENCES:
 http://mathworld.wolfram.com/topics/DataVisualization.html
 
+FURTHER READINGS:
+https://www.wolfram.com/products/mathematica/newin7/content/VectorAndFieldVisualization/DoHighResolutionVectorVisualization.html
+https://www.wolfram.com/products/mathematica/newin7/content/VectorAndFieldVisualization/VisualizeVectorFieldsUsingLineIntegralConvolutions.html
+
 @author Vladimir V. KUCHINOV
 @email  helloworld@vkuchinov.co.uk
 
