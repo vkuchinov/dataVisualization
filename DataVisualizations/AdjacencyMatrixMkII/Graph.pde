@@ -6,6 +6,8 @@ import java.util.List;
 
 class Graph{
   
+       final float PRECISION = 1.5;
+       
        ArrayList<Node> nodes; 
        PVector[] connections;
        
@@ -56,8 +58,8 @@ class Graph{
          
             for(int n = 0; n < nodes.size(); n++){
               
-                  if(PVector.dist(p0, nodes.get(n)) < 1.5) output[0] = n;
-                  if(PVector.dist(p1, nodes.get(n)) < 1.5) output[1] = n;
+                  if(PVector.dist(p0, nodes.get(n)) < PRECISION) output[0] = n;
+                  if(PVector.dist(p1, nodes.get(n)) < PRECISION) output[1] = n;
               
             }
             return output; 

@@ -30,7 +30,8 @@ final String URL = "data/BarnetteGraph.svg";
 
 void setup(){
   
-     size(680, 750, "processing.core.PGraphicsRetina2D"); 
+     //problems with size
+     size(750, 800, "processing.core.PGraphicsRetina2D"); 
      background(255);
      beginRecord(PDF, "output.pdf");
      
