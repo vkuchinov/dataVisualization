@@ -32,9 +32,8 @@ void setup(){
      size(600, 600, "processing.core.PGraphicsRetina2D"); 
      
      Graph g = new Graph(URL);
-     println(g.nodes);
      
-     Adjacency matrix = new Adjacency(100, 100, 400, g);
+     Adjacency matrix = new Adjacency(50, 50, 500, g);
      matrix.draw();
      
 }

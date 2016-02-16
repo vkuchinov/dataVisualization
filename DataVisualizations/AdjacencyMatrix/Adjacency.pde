@@ -8,7 +8,7 @@ class Adjacency{
      Adjacency(float x_, float y_, float w_, Graph g_){
   
            x = x_; y = y_; w = w_; h = w_;
-           step = w / g_.nodes.length;
+           step = w / g_.nodes.size();
            
            g = g_;
            
@@ -33,13 +33,13 @@ class Adjacency{
            noStroke();
            rect(x, y, w, h);
            
-           for(int j = 0; j < g.nodes.length; j++){
-               for(int i = 0; i < g.nodes.length; i++){
+           for(int j = 0; j < g.nodes.size(); j++){
+               for(int i = 0; i < g.nodes.size(); i++){
                  
                       //PVector p1 = points.get(i);
                       //PVector p2 = points.get(j);
                       fill(255);
-                      if(j == i) fill(0);
+                      if(j == i) fill(255);
                       for(int c = 0; c < g.connections.length; c++){
                           if((g.connections[c].x == j && g.connections[c].y == i) || (g.connections[c].x == i && g.connections[c].y == j)) fill(0);
                       }
