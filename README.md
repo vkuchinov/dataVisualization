@@ -1,5 +1,5 @@
 <h1>DATA VISUALIZATION</h1>
-an ongoing research based on 
+ongoing research based on 
 <i>http://mathworld.wolfram.com/topics/DataVisualization.html</i><br><br>
 
 <table border="0" style="background-color:#FFFFFF;border-collapse:collapse;border:0px solid #FFCC00;color:#000000;width:520" cellpadding="0" cellspacing="0">
