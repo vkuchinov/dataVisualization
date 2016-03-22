@@ -80,7 +80,9 @@ ongoing research based on
 	</tr>
 </table>
 
+
  [x] done [!] work in progress [-] planning
+
 
 <br>
 <b>BinaryPlot & Euler's Triangle Numbers Example</b>
