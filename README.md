@@ -45,7 +45,7 @@ ongoing research based on
 	</tr>
 	<tr>
 		<td>[-] Function Graph</td>
-		<td>[-] Poincaré Section</td>
+		<td>[-] Poincaré Section [Map]</td>
 		<td>[-] Tetraview</td>
 	</tr>
 	<tr>
