@@ -80,7 +80,7 @@ ongoing research based on
 	</tr>
 	
 	<tr>
-		<td colspan="3">ADDITIONAL TYPES</td>
+		<td colspan="3">ADDITIONAL TYPES [not from MathWorld]</td>
 	</tr>
 	
 	<tr>
