@@ -78,6 +78,17 @@ ongoing research based on
 		<td>[-] Scatterplott</td>
 		<td>[x] Complex Plot</td>
 	</tr>
+	
+	<tr>
+		<td colspan="3">ADDITIONAL TYPES</td>
+	</tr>
+	
+	<tr>
+		<td>[+] Hinton Diagram</td>
+		<td></td>
+		<td></td>
+	</tr>
+	
 </table>
 
 
