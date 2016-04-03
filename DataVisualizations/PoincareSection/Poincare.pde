@@ -1,5 +1,7 @@
 class Poincare{
  
+     final int NUM_SEEDS = 999;
+     
      PVector center;
      float dimensions;
      
@@ -15,7 +17,16 @@ class Poincare{
            //E = 1/8 plotting y(t) vs. y(t) at values where x(t) = 0
             
            stroke(255, 0, 255);
-           strokeWeight(0.5);
+           strokeWeight(1.0);
+           
+           for(int r = 0; r < NUM_SEEDS; r++){
+             
+                 //random x (-0.5, 0.5)
+                 
+                 double dx0; //
+                 
+             
+           }
            
        
      }

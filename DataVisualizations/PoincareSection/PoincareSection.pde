@@ -32,6 +32,13 @@ https://en.wikipedia.org/wiki/Poincar%C3%A9_map
 
 http://wwwstaff.ari.uni-heidelberg.de/mitarbeiter/ernst/movies.html
 http://a-ma.us/wp/2011/05/generating-poincare-sections-and-return-maps/
+http://demonstrations.wolfram.com/DynamicBilliardsInEllipse/
+http://lab.fs.uni-lj.si/lasin/wp/IMIT_files/chaotic/Poincare/poincare1.html
+https://www.physicsforums.com/threads/mathematica-for-poincare-sections-or-maybe-a-different-tool.419642/
+https://www.researchgate.net/figure/263029906_fig1_Figure-1-Poincare-surface-of-section-for-the-example-two-dimensional-potential-in-Eq
+
+FURTHER RESEARCH:
+https://plot.ly/
 
 @author   Vladimir V. KUCHINOV
 @email    helloworld@vkuchinov.co.uk
@@ -47,6 +54,7 @@ void setup(){
      
      surface = new Poincare(width/2, height/2, 300.0);
      
+     surface.function();
      surface.drawAxis();
      
       
