@@ -14,6 +14,9 @@ learning literature.
 
 REFERENCES:
 http://tonysyu.github.io/mpltools/auto_examples/special/plot_hinton.html
+http://cse22-iiith.vlabs.ac.in/exp2/index.html
+
+http://cse22-iiith.vlabs.ac.in/exp2/images/figA2.jpg
 
 @author  Vladimir V. KUCHINOV
 @email   helloworld@vkuchinov.co.uk
