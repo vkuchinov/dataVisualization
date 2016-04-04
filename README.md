@@ -85,7 +85,7 @@ ongoing research based on
 	
 	<tr>
 		<td>[+] Hinton Diagram</td>
-		<td></td>
+		<td>[-] Kiviat Diagram</td>
 		<td></td>
 	</tr>
 	
