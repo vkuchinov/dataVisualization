@@ -4,10 +4,12 @@ KIVIAT DIAGRAM or RADAR CHART
 also known as web chart, spider chart, 
 polar chart or corona diagram
 
+UPDATED:
+JSON data as input
+WORK IN PROGRESS
 
 REFERENCES:
 https://en.wikipedia.org/wiki/Radar_chart
-
 
 @author  Vladimir V. KUCHINOV
 @email   helloworld@vkuchinov.co.uk

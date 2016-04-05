@@ -1,0 +1,29 @@
+{
+	"Title": "HotelRate Kiviet Diagram",
+
+	"dataSet": {
+		"name": "Immediate",
+		"data": [54.00, 34.00, 99.04, 34.43, 88.00]
+	},
+
+	"dataSet": {
+		"name": "Minor",
+		"data": [4.00, 44.00, 69.04, 64.43, 68.00]
+	},
+
+	"dataSet": {
+		"name": "Moderate",
+		"data": [54.00, 34.00, 99.04, 34.43, 88.00]
+	},
+
+	"dataSet": {
+		"name": "Major",
+		"data": [54.00, 74.00, 77.04, 34.43, 78.00]
+	},
+
+	"dataSet": {
+		"name": "Business Threating",
+		"data": [45.00, 94.00, 11.04, 34.03, 58.00]
+	}
+
+}
