@@ -86,8 +86,15 @@ ongoing research based on
 	<tr>
 		<td>[+] Hinton Diagram</td>
 		<td>[-] Kiviat [<i>Radar</i>] Diagram</td>
-		<td></td>
+		<td>[-] Tornado Diagram</td>
 	</tr>
+	
+	<tr>
+		<td>[-] Perceptual Chart</td>
+		<td>[-] </td>
+		<td>[-] </td>
+	</tr>
+	
 	
 </table>
 
