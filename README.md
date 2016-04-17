@@ -22,7 +22,7 @@ would be extended lately with <i>http://mathworld.wolfram.com/topics/Mathematica
 	<tr>
 		<td>[x] Binary Plot</td>
 		<td>[-] Phase Flow</td>
-		<td>[-] Strang's Strange Figures</td>
+		<td>[x] Strang's Strange Figures</td>
 	</tr>
 	<tr>
 		<td>[-] Cartesian Plot</td>
