@@ -197,9 +197,10 @@ def jacobi_theta_1(z, m, verbose=False):
                 if abs(term_n) < eps:
                     break
 
-            term = term + 1
-
-        return (2*q**(0.25))*sum
+            term = term + 1.0;
+         }
+         
+          return (2*Math.pqw(q**(0.25))*sum
 
     # can't get here
     print >> sys.stderr, 'elliptic.jacobi_theta_1 in impossible state'

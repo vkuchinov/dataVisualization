@@ -45,6 +45,19 @@ EllipticNomeQ Examples
     0.75     ^2         0.051485            0.0514850134086885  
     0.99     ^2         0.22819             0.22819025851187744
 
+jtheta1(2, 0.5) returns 0.82964253964548285
+jtheta1(0.5, 0.25) returns 0.35084123863154953
+
+MATHWORLD
+
+  EllipticTheta(1, 2.0, 0.5) returns 1.63203
+  while
+  EllipticTheta(1, 2.0, 0.25) returns 1.31045;
+  
+  jtheta(1, 0.25, '0.2') returns 0.2945120798
+  
+  EllipticTheta(1, 0.25, 0.2) returns 0.294512
+
 REFERENCES:
 https://en.wikipedia.org/wiki/Nome_(mathematics)
 http://mathworld.wolfram.com/Nome.html
@@ -56,8 +69,6 @@ http://mathworld.wolfram.com/Nome.html
 
 void setup(){
  
-   println(EllipticNomeQ(sqrt(0.7))); 
-   //println("ellipk:", ellipk(0.5));
-   //println(agm(1.0, 1.0 / sqrt(2)));
-  
+    println(jtheta_1(2.0, Math.sqrt(0.5), false));
+    
 }

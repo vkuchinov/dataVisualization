@@ -11,6 +11,71 @@ TESTING VALUES:
 
 */
 
+//mag(x): Quick logarithmic magnitude estimate of a number. 
+//        Returns an integer or infinity mm such that |x|<=2m|x|<=2m.
+
+//def jtheta(n, z, q, derivative: false):
+double jtheta(int n_, double z_, double q_, boolean derivative_){
+  
+    final double THETA_Q_LIM = 10e-7;
+    
+    double res = 0.0;
+    
+    double extra = 10.0;
+    double cz = 0.5;
+    double extra2 = 50.0;
+    
+    
+    return res;
+    
+}
+
+
+//correct
+double jtheta_1(double z_, double q_, boolean verbose_){
+  
+     final double EPSILON = 2.22045e-16;
+     
+     double factor0, factor1, factor2;
+     
+     double k = Math.sqrt(q_);
+     double q = EllipticNomeQ(k);
+
+     if(verbose_) println("tk:", k, "tq:", q);
+     if(Math.abs(q) >= 1.0) println("error");
+
+     double sum = 0.0;
+     double term = 0.0;
+
+     if(z_ == 0.0) { if(verbose_) { println("elliptic.jacobi_theta_1: z == 0, return 0"); } return 0.0; }
+     else if(q == 0.0) { if(verbose_) { println("elliptic.jacobi_theta_1: q == 0, return 0"); } return 0.0; }
+     else{
+       
+          if(verbose_) println("ellipticl.jacobi_theta_1: calculating");
+          
+          while(true){
+            if(term % 2 == 0) factor0 = 1.0; else factor0 = -1.0;
+      
+            factor1 = Math.pow(q, (term*(term + 1.0)));
+            factor2 = Math.sin((2*term + 1.0)*z_);
+
+            double term_n = factor0 * factor1 * factor2;
+            sum = sum + term_n;
+            
+            if(verbose_) println("tTerm:", term, "tterm_n:", term_n, "tsum:", sum);
+            if(factor1 == 0.0) break;         
+            if(factor2 != 0){ if(Math.abs(term_n) < EPSILON) break; }
+
+            term = term + 1;
+          }
+          
+          return 2*Math.pow(q, 0.25)*sum;
+        
+        }
+  
+}
+
+
 //correct
 double EllipticNomeQ(double k_){
 
@@ -63,5 +128,12 @@ double agm(double a_,double b_){
             a_ = aTemp;
     }
     return a_;
+}
+
+int mag(double x_){
+  
+ 
+     return 1;
+     
 }
 
