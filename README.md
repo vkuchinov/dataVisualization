@@ -92,7 +92,7 @@ would be extended lately with <i>http://mathworld.wolfram.com/topics/Mathematica
 	
 	<tr>
 		<td>[-] Perceptual Chart</td>
-		<td>[-] </td>
+		<td>[-] Hive Plot</td>
 		<td>[-] </td>
 	</tr>
 	
