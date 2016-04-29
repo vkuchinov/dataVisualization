@@ -1,7 +1,8 @@
 <h1>DATA VISUALIZATION</h1>
 ongoing research based on 
 <i>http://mathworld.wolfram.com/topics/DataVisualization.html</i><br>
-would be extended lately with <i>http://mathworld.wolfram.com/topics/MathematicalArt.html</i><br><br>
+would be extended lately with <i>http://mathworld.wolfram.com/topics/MathematicalArt.html</i><br>
+<i>http://mathworld.wolfram.com/topics/MathematicsinArt.html</i><br>
 
 <table border="0" style="background-color:#FFFFFF;border-collapse:collapse;border:0px solid #FFCC00;color:#000000;width:520" cellpadding="0" cellspacing="0">
 	<tr>
