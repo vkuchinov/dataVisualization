@@ -43,6 +43,9 @@ https://en.wikipedia.org/wiki/Guilloch%C3%A9
 
 http://ministryoftype.co.uk/words/article/guilloches/
 
+APP FOR OSX
+http://www.excourse.com/excentro/
+
 
 @author  Vladimir V. KUCHINOV
 @email   helloworld@vkuchinov.co.uk
