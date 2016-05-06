@@ -1,8 +1,8 @@
 /*
 
 MOIRÉ PATTERN [freaky dots]
+with threshold post-processing
 
-Simple example with uniform field.
 
 REFERENCES:
 https://en.wikipedia.org/wiki/Moir%C3%A9_pattern
@@ -26,8 +26,10 @@ void setup(){
 
 void draw(){
   
-      background(255);
+      background(0);
       pattern.draw();
+
+    
   
 }
 
