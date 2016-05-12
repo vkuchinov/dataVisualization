@@ -3,6 +3,8 @@
 BUTTERFLY FUNCTION
 a fractal-like two-dimensional function
 
+"a" is 'edge sharpness' parameter
+
 f(x,y)=((x^2-y^2)sin((x+y)/a))/(x^2+y^2)
 
 @author Vladimir V. KUCHINOV
