@@ -7,7 +7,7 @@ class Curlicue{
       
       double x0, y0, x1, y1;
       
-      double scale = 4.0;
+      double scale = 5.0;
       
       ArrayList<PVector> points = new ArrayList<PVector>();
       
@@ -65,10 +65,13 @@ class Curlicue{
       
       void draw(){
  
-           for(int p = 1; p < points.size(); p++){
+           beginShape();
+           for(int p = 0; p < points.size(); p++){
             
-                line(points.get(p - 1).x, points.get(p - 1).y, points.get(p).x, points.get(p).y); 
+                curveVertex(points.get(p).x, points.get(p).y);
+                //line(points.get(p - 1).x, points.get(p - 1).y, points.get(p).x, points.get(p).y); 
            }
+           endShape();
         
       }
       
