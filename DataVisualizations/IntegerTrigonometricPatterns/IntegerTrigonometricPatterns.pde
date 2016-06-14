@@ -18,8 +18,8 @@ Trigonometric pattern;
 
 void setup(){
  
-   size(600, 600); 
+   size(512, 512); 
   
-   pattern = new Trigonometric(100);
+   pattern = new Trigonometric(64);
    pattern.draw();
 }
