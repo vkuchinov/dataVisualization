@@ -1,0 +1,79 @@
+{
+    
+    "parentDiv" : "network",
+    "w" : 1024,
+    "h" : 682,
+    "margin" : { "t" : 32, "r" : 32, "b" : 32, "l" : 32 },
+    "minmax" : { "min" : 0.0, "max" : 1.0 },
+    "colors" : ["#F25C05", "#FFFFFF", "#79CFD9"],
+
+    "top" : [
+    
+        {"id" : "layers", "label" : "NN Layers", "options" : [
+            
+            { "o" : "5,5", "l" : "5,5" },
+            { "o" : "10,10", "l" : "10,10" },
+            { "o" : "15,15", "l" : "15,15" }
+            
+        ], "default" : 1 },
+        
+        {"id" : "dropout", "label" : "Dropout", "options" : [
+            
+            { "o" : 0.0, "l" : "0.0" },
+            { "o" : 0.2, "l" : "0.2" },
+            { "o" : 0.4, "l" : "0.4" },
+            { "o" : 0.6, "l" : "0.6" },
+            { "o" : 0.8, "l" : "0.8" }
+            
+        ], "default" : 0 },
+        
+        {"id" : "indices", "label" : "Input Indices", "options" : [
+            
+            { "o" : "1,7", "l" : "House Age vs. House Size" }
+            
+        ], "default" : 0 },
+        
+        {"id" : "resolution", "label" : "Resolution", "options" : [
+            
+            { "o" : 3, "l" : "3x3" },
+            { "o" : 5, "l" : "5x5" },
+            { "o" : 8, "l" : "8x8" },
+            { "o" : 16, "l" : "16x16" }
+            
+        ], "default" : 1 }
+        
+    ],
+    
+    "default" : {
+        
+        "slider" : { "w" : 140 },
+        "lessmore" : { "w" : 16 }
+        
+    },
+    
+    "labels" : [
+        
+        {"l": "DATA", "gx": 0, "gy" : 0},
+        {"l" : "FEATURES", "gx" : 5, "gy" : 0 }, 
+        {"l" : "OUTPUT", "gx" : 24, "gy" : 0 }
+        
+    ],
+    
+    "hints" : [
+        
+        {"id": "dataset", "l" : "Which dataset|do you want|to use?", "gx" : 0, "gy" : 1},
+        {"id": "feedin", "l" : "Which properties|do you want|to feed in?", "gx" : 5, "gy" : 1}, {"id": "loss", "l" : "Loss: {loss}|Accuracy: {accuracy}", "gx" : 24, "gy" : 1},
+        {"id": "vloss", "l" : "Value loss: {vloss}|Value accuracy: {vaccuracy}", "gx" : 24, "gy" : 2},
+        {"id": "click", "l" : "Click on bar|to turn on/off|descrete mode", "gx" : 22, "gy" : 9}
+        
+    ],
+    
+    "sliders" : [
+        
+        {"id" : "ratioRange", "l" : "data ratio: ", "v" : 50, "range" : [0, 100], "decimal" : 0, "suffix" : "%", "gx" : 0, "gy" : 8 },
+        {"id" : "noiseRange", "l" : "noise: ", "v" : 0, "range" : [0, 50], "decimal" : 1, "suffix" : "", "gx" : 0, "gy" : 9 },
+        {"id" : "batchRange", "l" : "batch size: ", "v" : 0, "range" : [0, 30], "decimal" : 1, "suffix" : "", "gx" : 0, "gy" : 10 }
+        
+    ]
+
+}

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    
+  <head lang="en"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="keywords" content="neural networks,machine learning,javascript">
+  <title>A Neural Network Playground</title>
+  <link href="css/styles.css" rel="stylesheet" type="text/css">
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+
+</head>
+    
+<body>
+
+  <div id="top-controls">
+    <div id="top-ui" class="container l--page">
+      <div class="timeline-controls">
+        <button class="mdl-button mdl-js-button mdl-button--icon ui-resetButton" id="reset-button" title="Reset the network" data-upgraded=",MaterialButton" disabled>
+          <i class="material-icons">replay</i>
+        </button>
+        <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored ui-playButton" id="play-pause-button" title="Run/Pause" data-upgraded=",MaterialButton">
+          <i class="material-icons">play_arrow</i>
+        </button>
+        <button class="mdl-button mdl-js-button mdl-button--icon ui-stepButton" id="next-step-button" title="Step" data-upgraded=",MaterialButton">
+          <i class="material-icons">skip_next</i>
+        </button>
+      </div>
+      <div class="control">
+        <span class="label">Epoch</span>
+        <span class="value" id="iter-number">000,000</span>
+      </div>
+    </div>
+  </div>
+
+  <label for="tooltipValue">
+  <div id="tooltip">    
+      <span class="label"><span id="tag">{param}</span> is </span><span id="value">0.0</span>
+  </div>
+  </label>
+    
+  <div id="network" class="l--page"></div>
+  <script src="js/app.js"></script>
+   
+</body>
+</html>
