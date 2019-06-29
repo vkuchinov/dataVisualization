@@ -3,9 +3,11 @@
     "parentDiv" : "network",
     "w" : 1024,
     "h" : 682,
+    "grids" : { "cols" : 32, "rows" : 16, "gap" : 0 },
     "margin" : { "t" : 32, "r" : 32, "b" : 32, "l" : 32 },
     "minmax" : { "min" : 0.0, "max" : 1.0 },
     "colors" : ["#F25C05", "#FFFFFF", "#79CFD9"],
+    "bw" : ["#000000", "#808080", "#FFFFFF"],
 
     "top" : [
     
@@ -63,8 +65,8 @@
         
         {"id": "dataset", "l" : "Which dataset|do you want|to use?", "gx" : 0, "gy" : 1},
         {"id": "feedin", "l" : "Which properties|do you want|to feed in?", "gx" : 5, "gy" : 1}, {"id": "loss", "l" : "Loss: {loss}|Accuracy: {accuracy}", "gx" : 24, "gy" : 1},
-        {"id": "vloss", "l" : "Value loss: {vloss}|Value accuracy: {vaccuracy}", "gx" : 24, "gy" : 2},
-        {"id": "click", "l" : "Click on bar|to turn on/off|descrete mode", "gx" : 22, "gy" : 9}
+        {"id": "val_loss", "l" : "Value loss: {vloss}|Value accuracy: {vaccuracy}", "gx" : 24, "gy" : 2},
+        {"id": "click", "l" : "Click on bar|to turn on/off|discrete mode", "gx" : 22, "gy" : 9}
         
     ],
     

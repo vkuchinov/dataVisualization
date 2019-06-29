@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    
+  <head lang="en"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="keywords" content="neural networks,machine learning,javascript">
+  <title>A Neural Network Playground</title>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+
+</head>
+    
+<body>
+    
+    <svg width="0" height="0">
+      <defs>  
+        <filter id="discrete" color-interpolation-filters="sRGB">
+            <feComponentTransfer>
+                <feFuncR type="discrete" tableValues="0 1"/>
+                <feFuncG type="discrete" tableValues="0 1"/>
+                <feFuncB type="discrete" tableValues="0 1"/>
+            </feComponentTransfer>
+            <feComponentTransfer>
+                <feFuncR type="table" tableValues="0.486 1.0 0.937"/>
+                <feFuncG type="table" tableValues="0.812 1.0 0.360"/>
+                <feFuncB type="table" tableValues="0.847 1.0 0.125"/>
+            </feComponentTransfer>
+        </filter>
+
+        <filter id="gradiental" color-interpolation-filters="sRGB">
+            <feComponentTransfer>
+                <feFuncR type="table" tableValues="0.486 1.0 0.937"/>
+                <feFuncG type="table" tableValues="0.812 1.0 0.360"/>
+                <feFuncB type="table" tableValues="0.847 1.0 0.125"/>
+            </feComponentTransfer>
+        </filter>
+      </defs>
+    </svg>
+    
+<script>
+//https://stackoverflow.com/questions/41517564/black-and-white-not-grayscale-filter-in-svg-ideally-snap-svg
+    
+var svg, defs, pattern;
+    
+svg = d3.select("body").append("svg").attr("width", 192).attr("height", 192);
+
+svg.append("rect").attr("width", 192).attr("height", 192).attr("fill", "#DEDEDE");
+    
+var defs = defs = svg.append("svg:defs");
+
+    
+var ptrn = defs.append("svg:pattern")
+   .attr("id", "raster")
+   .attr("width", 128)
+   .attr("height", 128)
+   .attr("patternUnits", "userSpaceOnUse")
+   .attr("patternTransform", "translate(32,32)")
+   .append("svg:image")
+   .attr("xlink:href", "pattern.png")
+   .attr("width", 128)
+   .attr("height", 128)
+   .attr("x", 0)
+   .attr("y", 0);
+    
+var filtered = svg.append("rect").attr("x", 32).attr("y", 32).attr("width", 128).attr("height", 128)
+.attr("fill", "url(#raster)").attr("filter", "url(#f2)");
+    
+</script>
+
+</body>
+</html>

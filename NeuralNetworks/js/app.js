@@ -15,100 +15,114 @@ everything else is developed from scratch by me.
 @email  helloworld@vkuchinov.co.uk
 
 */
+var player, config, network, grids, svg, defs, tooltip, neurons, synapses, xloss, accLine, accCurve, lossLine, lossCurve;
 
-var player, config, network, grids, svg, defs, tooltip, neurons, synapses;
-
-//network dynamic JSON object
 network = {
 
     parameters: {
 
-        descrete: false,
+        discrete: false,
 
-    },
-    
-    input : {
-        
-        values  : [
-            
-				0.48414304299863586,
-				0.99352224579296,
-				0.9313089312471964,
-				0.6163800876003568,
-				0.9142359368096583,
-				0.10773214690578437,
-				0.4665245441064815,
-				0.19926765852092765,
-				0.059855396697792385
-            
-        ],
-
-        
-    },
-    
-    output : {
-        
-        min : { x: 0.0, y: 0.0 },
-        max : { x: 1.0, y: 1.0 }
-        
     },
 
     neurons: [],
 
     synapses: [],
-    
-    matrix : [[4, 10, 0], [1, 96, 2], [0, 22, 6]],
-    
-    testloss : [
-        
-        { epoch: 0, loss : 0.34, acc: 0.23 },
-        { epoch: 1, loss : 0.4, acc: 0.03 },
-        { epoch: 2, loss : 0.53, acc: 0.3 },
-        { epoch: 3, loss : 0.34, acc: 0.14 },
-        { epoch: 4, loss : 0.67, acc: 0.23 },
-    
-    ]
+
+    matrix: [
+        [4, 10, 0],
+        [1, 96, 2],
+        [0, 22, 6]
+    ],
 
 };
 
 //epoch player
 function Player() {
 
-    this.isPlaying = false;
-    this.state = "pause";
-    this.iter = 1;
+    this.interval = 500;
+    this.state = false;
+    this.iter = 0;
+    this.limits = [0, 0];
 
-    this.run = function(t_) {
+    this.reset = function() {
+
+        this.state = "play";
+        this.iter = 0;
+        d3.select("#reset-button").node().disabled = true;
+        d3.select("#play-pause-button").node().disabled = false;
+        d3.select("#play-pause-button").select("i").node().innerHTML = "play_arrow";
+        d3.select("#next-step-button").node().disabled = false;
+
+        this.state = false;
+        update(this.iter, this.limits);
+
+    }
+
+    this.next = function() {
 
         var this_ = player;
+        d3.select("#reset-button").node().disabled = false;
+        this_.iter++;
 
-        if (this_.isPlaying == true) {
+        if (this_.iter > this_.limits[1] - this_.limits[0]) {
 
-            player.iter++;
-            document.getElementById("iter-number").innerHTML = Number(this_.iter / 1000).toLocaleString("en-US", {
-                minimumIntegerDigits: 3,
-                minimumFractionDigits: 3,
-                useGrouping: false
-            });
+            d3.select("#play-pause-button").node().disabled = true;
+            d3.select("#play-pause-button").select("i").node().innerHTML = "stop";
+            d3.select("#next-step-button").node().disabled = true;
+
+        } else {
+
+            update(this_.iter, this_.limits);
 
         }
 
     }
 
-    document.getElementById("iter-number").innerHTML = Number(this.iter / 1000).toLocaleString("en-US", {
-            minimumIntegerDigits: 3,
-            minimumFractionDigits: 3,
-            useGrouping: false
-    });
-    
-    this.timer = d3.timer(this.run, 500);
-    
+    this.setLimits = function(value0_, value1_) {
+        this.limits = [value0_, value1_];
+    }
+
+    this.run = function(t_) {
+
+        var this_ = player;
+        if (this_.state) {
+            this_.next();
+        }
+
+    }
+
+    this.timer = d3.interval(this.run, this.interval);
+
     d3.select("#play-pause-button").on("click", function(d_) {
 
-        player.playOrPause();
-        d3.select(this).select("i").node().innerHTML = player.state;
+        var this_ = player;
+
+        this_.state = !this_.state;
+
+        if (d3.select(this).select("i").node().innerHTML != "stop") {
+
+            if (this_.state) {
+
+                d3.select(this).select("i").node().innerHTML = "pause";
+                d3.select("#reset-button").node().disabled = true;
+                d3.select("#next-step-button").node().disabled = true;
+
+
+            } else {
+
+                d3.select(this).select("i").node().innerHTML = "play_arrow";
+                if (this.iter > 0) {
+                    d3.select("#reset-button").node().disabled = false;
+                }
+                d3.select("#next-step-button").node().disabled = false;
+
+            }
+
+        }
 
     });
+
     d3.select("#reset-button").on("click", function(d_) {
         player.reset();
     });
@@ -117,63 +131,18 @@ function Player() {
     });
 
 }
-
-Player.prototype.playOrPause = function() {
-
-    this.isPlaying ? (this.isPlaying = !1, this.pause()) : (this.isPlaying = !0, this.play())
-
-}
-Player.prototype.pause = function() {
-    document.getElementById("next-step-button").disabled = false;
-    this.state = "play_arrow";
-}
-Player.prototype.play = function() {
-    document.getElementById("next-step-button").disabled = true;
-    this.state = "pause";
-    document.getElementById("reset-button").disabled = false;
-}
-Player.prototype.reset = function() {
-
-    this.state = "play";
-    this.isPlaying = false;
-    this.iter = 1;
-    document.getElementById("iter-number").innerHTML = Number(0).toLocaleString("en-US", {
-        minimumIntegerDigits: 3,
-        minimumFractionDigits: 3,
-        useGrouping: false
-    });
-    document.getElementById("reset-button").disabled = true;
-
-}
-Player.prototype.next = function() {
-
-    if (this.isPlaying == false) {
-
-        this.iter++;
-        document.getElementById("iter-number").innerHTML = Number(this.iter / 1000).toLocaleString("en-US", {
-            minimumIntegerDigits: 3,
-            minimumFractionDigits: 3,
-            useGrouping: false
-        });
-        document.getElementById("reset-button").disabled = false;
-
-    }
-
-}
-Player.prototype.set = function(value_) { this.iter = value_; }
-
 player = new Player();
 
 //grid helpers [guidelines]
-function Grids(parent_, cols_, rows_, gap_) {
+function Grids(parent_, params_) {
 
     this.x = config.margin.l;
     this.y = config.margin.t;
     this.w = config.w;
     this.h = config.h;
-    this.gap = gap_;
-    this.rows = rows_;
-    this.cols = cols_;
+    this.gap = params_.gap;
+    this.rows = params_.rows;
+    this.cols = params_.cols;
     this.gw = (this.w - this.gap * (this.cols - 1)) / this.cols,
         this.gh = (this.h - this.gap * (this.rows - 1)) / this.rows;
 
@@ -289,20 +258,24 @@ d3.inputPointsData = function() {
 
             var g = d3.select(this)
                 .attr("transform", "translate(" + d_.x + "," + d_.y + ")");
-            
+
             var area = g.append("rect")
-                       .attr("width", d_.w)
-                       .attr("height", d_.h)
-                       .attr("fill", "#FFFFFF")
+                .attr("width", d_.w)
+                .attr("height", d_.h)
+                .attr("fill", "#FFFFFF")
 
             var inPoints = g.selectAll(".pointsIn")
-                    .data(network.input.points)
-                    .enter().append("circle")
-                    .attr("class", "pointsIn")
-                    .attr("cx", function(d2_) { return remapFloat(d2_.x, network.input.min.x, network.input.max.x, 0.0, d_.w); })
-                    .attr("cy", function(d2_) {  return remapFloat(d2_.y, network.input.min.y, network.input.max.y, 0, d_.h); })
-                    .attr("r", d_.w * 2.0E-2)
-                    .attr("fill", "#000000")
+                .data(network.input.points)
+                .enter().append("circle")
+                .attr("class", "pointsIn")
+                .attr("cx", function(d2_) {
+                    return remapFloat(d2_.x, network.input.min.x, network.input.max.x, 0.0, d_.w);
+                })
+                .attr("cy", function(d2_) {
+                    return remapFloat(d2_.y, network.input.min.y, network.input.max.y, 0, d_.h);
+                })
+                .attr("r", d_.w * 2.0E-2)
+                .attr("fill", "#000000")
 
 
         });
@@ -317,9 +290,9 @@ d3.inputPatternData = function() {
 
     var canvas = document.createElement("canvas");
     var ctx = canvas.getContext("2d");
-    
+
     function inputPatternData(selection_) {
-        
+
         selection_.each(function(d_, i_) {
 
             var g = d3.select(this)
@@ -333,240 +306,364 @@ d3.inputPatternData = function() {
             ctx.putImageData(imgData, 0, 0);
 
             var bitmap = canvas.toDataURL();
-            
+
             var ptrn = defs.append("svg:pattern")
-                       .attr("id", "input_pattern")
-                       .attr("width", d_.w)
-                       .attr("height", d_.h)
-                       .attr("patternUnits", "userSpaceOnUse")
-                       .append("svg:image")
-                       .attr("xlink:href", bitmap)
-                       .attr("width", d_.w)
-                       .attr("height", d_.h)
-                       .attr("x", 0)
-                       .attr("y", 0);
-                
+                .attr("id", "input_pattern")
+                .attr("width", d_.w)
+                .attr("height", d_.h)
+                .attr("patternUnits", "userSpaceOnUse")
+                .append("svg:image")
+                .attr("xlink:href", bitmap)
+                .attr("width", d_.w)
+                .attr("height", d_.h)
+                .attr("x", 0)
+                .attr("y", 0);
+
             var area = g.append("rect")
-                       .attr("width", d_.w)
-                       .attr("height", d_.h)
-                       .attr("fill", "url(#input_pattern)")
+                .attr("class", "shifter")
+                .attr("width", d_.w)
+                .attr("height", d_.h)
+                .attr("fill", "url(#input_pattern)")
+                .attr("filter", "url(#gradiental)")
 
         });
 
     }
-    
-    function renderFunction(parent_, values_, w_){
 
-     var matrix2D = bilinearInterpolation2D(get2Dfrom1D(values_), w_);         
-     var out = parent_.createImageData(w_, w_); 
-      
-     for(var i = 0; i < out.data.length; i += 4){
-         
-         var x = (i / 4) % w_;
-         var y = Math.floor(i / 4 / w_);
-         
-         var v = remap(matrix2D[x][y], 0, 1, -1, 1);
-         
-         var color = lerpHexColors(config.colors[1], config.colors[2], v);
-         if(v < 0) { color = lerpHexColors(config.colors[1], config.colors[0], Math.abs(v)); }
+    function renderFunction(parent_, values_, w_) {
 
-         if(color == "#") { color = config.colors[1]; }
-         var rgb = d3.color(color);
-         
-         out.data[i] = rgb.r;
-         out.data[i + 1] = rgb.g;
-         out.data[i + 2] = rgb.b;
-         out.data[i + 3] = 255;
-         
-     }
+        var matrix2D = bilinearInterpolation2D(get2Dfrom1D(values_), w_);
+        var out = parent_.createImageData(w_, w_);
 
-     return out;
-      
-  }
-    
-  function create2DArray(w_){
-      
-      out = new Array(w_);
-      
-      for(var i = 0; i < w_; i++){ 
-          
-          
-          out[i] = new Array(w_); 
-          for(var j = 0; j < w_; j++){ out[i][j] = 0.0; }
-                                 
-                                 
-      }
-      
-      return out;
-      
-  }
-    
-  function get2Dfrom1D(data_){
-      
-      var w0 = Math.sqrt(data_.length);
-      var out = create2DArray(w0);
-      
-      for(var i = 0; i < data_.length; i++) { var x = i % w0; var y = Math.floor(i / w0); out[x][y] = data_[i]; };
-      
-      return out;
-      
-  }
-    
-  function get1Dfrom2D(data_){
-      
-      var out = [data_.length * data_.length]
-      
-      for (var x = 0; x < data_.length; ++x) {
-        for (var y = 0; y < data_[0].length; ++y) {
-          
-            
+        for (var i = 0; i < out.data.length; i += 4) {
+
+            var x = (i / 4) % w_;
+            var y = Math.floor(i / 4 / w_);
+
+            var v = remap(matrix2D[x][y], 0, 1, -1, 1);
+
+            var color = lerpHexColors(config.bw[1], config.bw[2], v);
+            if (v < 0) {
+                color = lerpHexColors(config.bw[1], config.bw[0], Math.abs(v));
+            }
+
+            if (color == "#") {
+                color = config.bw[1];
+            }
+            var rgb = d3.color(color);
+
+            out.data[i] = rgb.r;
+            out.data[i + 1] = rgb.g;
+            out.data[i + 2] = rgb.b;
+            out.data[i + 3] = 255;
+
         }
-      }
-      
-      return out;
-      
-  }
-    
-  function bilinearInterpolation2D(data_, out_){
 
-      var w0 = data_.length;
-      var out = create2DArray(out_);
-      
-      for (var x = 0; x < out_; ++x) {
-        for (var y = 0; y < out_; ++y) {
-          
-            var gx = x / out_ * (w0 - 1);
-            var gy =  y / out_ * (w0 - 1);
-            var gxi = Math.floor(gx);
-            var gyi = Math.floor(gy);
+        return out;
 
-            var c00 = data_[gxi][gyi];
-            var c10 = data_[gxi + 1][gyi];
-            var c01 = data_[gxi][gyi + 1];
-            var c11 = data_[gxi + 1][gyi + 1];
-            
-            out[x][y] = bilerp(c00, c10, c01, c11, gx - gxi, gy - gyi);
-      
+    }
+
+    function create2DArray(w_) {
+
+        out = new Array(w_);
+
+        for (var i = 0; i < w_; i++) {
+
+
+            out[i] = new Array(w_);
+            for (var j = 0; j < w_; j++) {
+                out[i][j] = 0.0;
+            }
+
+
         }
-      }
-      
-      return out;
-    
-  }
-    
-  function lerpTwoHexColors(hexA_, hexB_, t_){
-      
-      var ah = parseInt(hexA_.replace(/#/g, ""), 16),
-      ar = ah >> 16, ag = ah >> 8 & 0xFF, ab = ah & 0xFF,
-      bh = parseInt(hexB_.replace(/#/g, ""), 16),
-      br = bh >> 16, bg = bh >> 8 & 0xFF, bb = bh & 0xFF,
-      rr = ar + t_ * (br - ar),
-      rg = ag + t_ * (bg - ag),
-      rb = ab + t_ * (bb - ab);
 
-      return "#" + ((1 << 24) + (rr << 16) + (rg << 8) + rb | 0).toString(16).slice(1);
-      
-  }
-  function dist(x0_, y0_, x1_, y1_){ return Math.sqrt((x1_- x0_) + (y1_ - y0_)); }
-    
-  function remap(v_, min0_, max0_, min1_, max1_){ return min1_ + (v_ - min0_) / (max0_ - min0_) * (max1_ - min1_); }
+        return out;
 
-  function getPlaceholder(d_, w_, r_, dir_){
+    }
 
-      var out = "";
-      
-      var points = [{x: -w_/2, y: -w_/2, c: "M"}, {x: w_/2, y: -w_/2, c: "M"}, {x: w_/2, y: w_/2, c: "M"}, {x:  -w_/2, y: w_/2, c: "M"}];
-     
-      var tmp = [], l = r_/ w_, N = points.length;
-      
-      points.forEach(function(p_, i_){
+    function get2Dfrom1D(data_) {
 
-          var add = [];
-          
-          var lft = points[(N - 1) -(N - i_)%4],
-              rht = points[(i_ + 1)%4];
-                            
-          add.push({x: lerp(p_.x, lft.x, l), y: lerp(p_.y, lft.y, l), c: "L"});
-          add.push({x: p_.x, y: p_.y, c: "S"});
-          add.push({x: lerp(p_.x, rht.x, l), y: lerp(p_.y, rht.y, l), c: ""});
+        var w0 = Math.sqrt(data_.length);
+        var out = create2DArray(w0);
 
-          if(i_ == 1 && (dir_ == "LEFT" || dir_ == "BOTH")){
-              
-              var m = { x: lerp(p_.x, rht.x, 0.5), y: lerp(p_.y, rht.y, 0.5) };
-            
-              add.push({x: m.x, y: m.y - r_ * 0.75, c: "L"});
-              add.push({x: m.x + r_ * 0.75, y: m.y, c: "L"});
-              add.push({x: m.x, y: m.y + r_ * 0.75, c: "L"});
-              
-              d_.out = {x: m.x + r_ * 0.75, y: m.y};
-       
-          }
-          
-          if(i_ == N - 1 && (dir_ == "RIGHT" || dir_ == "BOTH")){
-              
-              var m = { x: lerp(p_.x, rht.x, 0.5), y: lerp(p_.y, rht.y, 0.5) };
-            
-              add.push({x: m.x, y: m.y - r_ * 0.75, c: "L"});
-              add.push({x: m.x - r_ * 0.75, y: m.y, c: "L"});
-              add.push({x: m.x, y: m.y + r_ * 0.75, c: "L"});
-              
-              d_.in = {x: m.x - r_ * 0.75, y: m.y};
-       
-          }
-          
-          add.forEach(function(a_){ tmp.push(a_); });
-          
-          
-      });
-      
-      points = tmp;
-      out += "M" + points[0].x + " " + points[0].y;
-      
-      points.forEach(function(p_, i_){
+        for (var i = 0; i < data_.length; i++) {
+            var x = i % w0;
+            var y = Math.floor(i / w0);
+            out[x][y] = data_[i];
+        };
 
-          if(i_ != 0){
-              
-              out += " " +  points[i_].c + points[i_].x + " " + points[i_].y
-              
-          }
-          
-      })
-      
-      return out;
-      
-  }
-    
-  function getOutPlaceholder(d_, w_, off_, r_){
+        return out;
 
-      var out = "", dir = "RIGHT", off = (w_ - off_) / 2 + off_ * 0.0415;
-      
-      var points = [{x: 0, y: -w_/2 + off, c: "M"}, {x: w_, y: -w_/2 + off, c: " L"}, {x: w_, y: w_/2 + off - off_ * 0.0415, c: " L"}, {x: 0, y: w_/2 + off - off_ * 0.0415, c: " L"}];
-      
-      points = [];
-      
-      points.push({x: 0, y: r_ * 0.75, c: " M"});
-      points.push({x: -off_ / 8, y: 0, c: " L"});
-      points.push({x: 0, y: -r_ * 0.75, c: " L"});
-      
-      d_.in = { x : -off_ / 8, y : 0 };
-      
-      points.forEach(function(p_, i_){
+    }
 
-              out += " " + p_.c + p_.x + " " + p_.y
-   
-      })
-      
-      return out;
-      
-  }
-    
-  function lerp(v0_, v1_, t_){  return v0_ + (v1_ - v0_) * t_;  }
-    
-  function bilerp(c00_, c10_, c01_, c11_, tx_, ty_) {
-      
+    function get1Dfrom2D(data_) {
+
+        var out = [data_.length * data_.length]
+
+        for (var x = 0; x < data_.length; ++x) {
+            for (var y = 0; y < data_[0].length; ++y) {
+
+
+            }
+        }
+
+        return out;
+
+    }
+
+    function bilinearInterpolation2D(data_, out_) {
+
+        var w0 = data_.length;
+        var out = create2DArray(out_);
+
+        for (var x = 0; x < out_; ++x) {
+            for (var y = 0; y < out_; ++y) {
+
+                var gx = x / out_ * (w0 - 1);
+                var gy = y / out_ * (w0 - 1);
+                var gxi = Math.floor(gx);
+                var gyi = Math.floor(gy);
+
+                var c00 = data_[gxi][gyi];
+                var c10 = data_[gxi + 1][gyi];
+                var c01 = data_[gxi][gyi + 1];
+                var c11 = data_[gxi + 1][gyi + 1];
+
+                out[x][y] = bilerp(c00, c10, c01, c11, gx - gxi, gy - gyi);
+
+            }
+        }
+
+        return out;
+
+    }
+
+    function lerpTwoHexColors(hexA_, hexB_, t_) {
+
+        var ah = parseInt(hexA_.replace(/#/g, ""), 16),
+            ar = ah >> 16,
+            ag = ah >> 8 & 0xFF,
+            ab = ah & 0xFF,
+            bh = parseInt(hexB_.replace(/#/g, ""), 16),
+            br = bh >> 16,
+            bg = bh >> 8 & 0xFF,
+            bb = bh & 0xFF,
+            rr = ar + t_ * (br - ar),
+            rg = ag + t_ * (bg - ag),
+            rb = ab + t_ * (bb - ab);
+
+        return "#" + ((1 << 24) + (rr << 16) + (rg << 8) + rb | 0).toString(16).slice(1);
+
+    }
+
+    function dist(x0_, y0_, x1_, y1_) {
+        return Math.sqrt((x1_ - x0_) + (y1_ - y0_));
+    }
+
+    function remap(v_, min0_, max0_, min1_, max1_) {
+        return min1_ + (v_ - min0_) / (max0_ - min0_) * (max1_ - min1_);
+    }
+
+    function getPlaceholder(d_, w_, r_, dir_) {
+
+        var out = "";
+
+        var points = [{
+            x: -w_ / 2,
+            y: -w_ / 2,
+            c: "M"
+        }, {
+            x: w_ / 2,
+            y: -w_ / 2,
+            c: "M"
+        }, {
+            x: w_ / 2,
+            y: w_ / 2,
+            c: "M"
+        }, {
+            x: -w_ / 2,
+            y: w_ / 2,
+            c: "M"
+        }];
+
+        var tmp = [],
+            l = r_ / w_,
+            N = points.length;
+
+        points.forEach(function(p_, i_) {
+
+            var add = [];
+
+            var lft = points[(N - 1) - (N - i_) % 4],
+                rht = points[(i_ + 1) % 4];
+
+            add.push({
+                x: lerp(p_.x, lft.x, l),
+                y: lerp(p_.y, lft.y, l),
+                c: "L"
+            });
+            add.push({
+                x: p_.x,
+                y: p_.y,
+                c: "S"
+            });
+            add.push({
+                x: lerp(p_.x, rht.x, l),
+                y: lerp(p_.y, rht.y, l),
+                c: ""
+            });
+
+            if (i_ == 1 && (dir_ == "LEFT" || dir_ == "BOTH")) {
+
+                var m = {
+                    x: lerp(p_.x, rht.x, 0.5),
+                    y: lerp(p_.y, rht.y, 0.5)
+                };
+
+                add.push({
+                    x: m.x,
+                    y: m.y - r_ * 0.75,
+                    c: "L"
+                });
+                add.push({
+                    x: m.x + r_ * 0.75,
+                    y: m.y,
+                    c: "L"
+                });
+                add.push({
+                    x: m.x,
+                    y: m.y + r_ * 0.75,
+                    c: "L"
+                });
+
+                d_.out = {
+                    x: m.x + r_ * 0.75,
+                    y: m.y
+                };
+
+            }
+
+            if (i_ == N - 1 && (dir_ == "RIGHT" || dir_ == "BOTH")) {
+
+                var m = {
+                    x: lerp(p_.x, rht.x, 0.5),
+                    y: lerp(p_.y, rht.y, 0.5)
+                };
+
+                add.push({
+                    x: m.x,
+                    y: m.y - r_ * 0.75,
+                    c: "L"
+                });
+                add.push({
+                    x: m.x - r_ * 0.75,
+                    y: m.y,
+                    c: "L"
+                });
+                add.push({
+                    x: m.x,
+                    y: m.y + r_ * 0.75,
+                    c: "L"
+                });
+
+                d_.in = {
+                    x: m.x - r_ * 0.75,
+                    y: m.y
+                };
+
+            }
+
+            add.forEach(function(a_) {
+                tmp.push(a_);
+            });
+
+
+        });
+
+        points = tmp;
+        out += "M" + points[0].x + " " + points[0].y;
+
+        points.forEach(function(p_, i_) {
+
+            if (i_ != 0) {
+
+                out += " " + points[i_].c + points[i_].x + " " + points[i_].y
+
+            }
+
+        })
+
+        return out;
+
+    }
+
+    function getOutPlaceholder(d_, w_, off_, r_) {
+
+        var out = "",
+            dir = "RIGHT",
+            off = (w_ - off_) / 2 + off_ * 0.0415;
+
+        var points = [{
+            x: 0,
+            y: -w_ / 2 + off,
+            c: "M"
+        }, {
+            x: w_,
+            y: -w_ / 2 + off,
+            c: " L"
+        }, {
+            x: w_,
+            y: w_ / 2 + off - off_ * 0.0415,
+            c: " L"
+        }, {
+            x: 0,
+            y: w_ / 2 + off - off_ * 0.0415,
+            c: " L"
+        }];
+
+        points = [];
+
+        points.push({
+            x: 0,
+            y: r_ * 0.75,
+            c: " M"
+        });
+        points.push({
+            x: -off_ / 8,
+            y: 0,
+            c: " L"
+        });
+        points.push({
+            x: 0,
+            y: -r_ * 0.75,
+            c: " L"
+        });
+
+        d_.in = {
+            x: -off_ / 8,
+            y: 0
+        };
+
+        points.forEach(function(p_, i_) {
+
+            out += " " + p_.c + p_.x + " " + p_.y
+
+        })
+
+        return out;
+
+    }
+
+    function lerp(v0_, v1_, t_) {
+        return v0_ + (v1_ - v0_) * t_;
+    }
+
+    function bilerp(c00_, c10_, c01_, c11_, tx_, ty_) {
+
         return lerp(lerp(c00_, c10_, tx_), lerp(c01_, c11_, tx_), ty_);
-      
-  }
+
+    }
 
     return inputPatternData;
 
@@ -575,460 +672,581 @@ d3.inputPatternData = function() {
 //neuron visualisation
 d3.neuron = function() {
 
-  var gradient = d3.scaleLinear().domain([0.0, 0.72, 1.0]).range(config.colors),
-  minmax = { min: Number.POSITIVE_INFINITY, max: Number.NEGATIVE_INFINITY };
-  
-  var canvas = document.createElement("canvas");
-  var ctx = canvas.getContext("2d");
-    
-  function neuron(selection_) {
-      
-      selection_.each(function(d_, i_) {
-    
-      var g = d3.select(this)
-              .attr("transform", "translate(" + d_.x + "," + d_.y + ")");
-          
-      if(d_.id != "out"){
-          
-          //all neurons except out 
-          var dir = "LEFT";
-          if(d_.layer != 1) {dir = "BOTH"; }
-          if(d_.layer == network.layers.length) { dir = "RIGHT"; }
+    var gradient = d3.scaleLinear().domain([0.0, 0.72, 1.0]).range(config.colors),
+        minmax = {
+            min: Number.POSITIVE_INFINITY,
+            max: Number.NEGATIVE_INFINITY
+        };
 
-          var params = { w: network.nsize * 0.917, o: -network.nsize * 0.4585 };
-          
-          canvas = document.createElement("canvas");
-          canvas.id  = "canvas_" + i_;
-          canvas.width  = network.nsize;
-          canvas.height = network.nsize;
+    var canvas = document.createElement("canvas");
+    var ctx = canvas.getContext("2d");
 
-          ctx = canvas.getContext("2d");
-          var imgData = renderFunction(ctx, d_.values, network.nsize);
-          ctx.putImageData(imgData, 0, 0);
-          
-          var bitmap = canvas.toDataURL();
+    function neuron(selection_) {
 
-          defs.append("svg:pattern")
-          .attr("id", "pattern_" + i_)
-          .attr("width", params.w)
-          .attr("height", params.w)
-          .attr("patternUnits", "userSpaceOnUse")
-          .attr("patternTransform", "translate(" + params.o + "," + params.o + ")")
-          .append("svg:image")
-          .attr("xlink:href", bitmap)
-          .attr("width", params.w)
-          .attr("height", params.w)
-          .attr("x", 0)
-          .attr("y", 0);
-        
-          var imgData2 = renderFunction(ctx, d_.values, network.nsize, true);
-          ctx.putImageData(imgData2, 0, 0);
-          
-          var bitmap2 = canvas.toDataURL();
-          
-          defs.append("svg:pattern")
-          .attr("id", "descrete_" + i_)
-          .attr("width", params.w)
-          .attr("height", params.w)
-          .attr("patternUnits", "userSpaceOnUse")
-          .attr("patternTransform", "translate(" + params.o + "," + params.o + ")")
-          .append("svg:image")
-          .attr("xlink:href", bitmap2)
-          .attr("width", params.w)
-          .attr("height", params.w)
-          .attr("x", 0)
-          .attr("y", 0);
-          
-          var node = g.append("path")
-                       .attr("d", function(d_) { return getPlaceholder(d_, network.nsize, network.nsize / 6.0, dir)})
-                       .attr("fill", "#193D4D")
-                       .attr("stroke", "none")
+        selection_.each(function(d_, i_) {
 
-          var area = g.append("rect")
-                       .attr("class", "neuronPattern")
-                       .attr("x", params.o)
-                       .attr("y", params.o)
-                       .attr("rx", network.nsize / 8)
-                       .attr("ry", network.nsize / 8)
-                       .attr("width", params.w)
-                       .attr("height", params.w)
-                       .attr("fill", "url(#pattern_" + i_ + ")")
-                       .attr("stroke", "none")
-                       .on("mouseover", function(d_){
+            var g = d3.select(this)
+                .attr("transform", "translate(" + d_.x + "," + d_.y + ")");
 
-                            canvas.id  = "canvas_" + i_;
-                            canvas.width  = network.osize;
-                            canvas.height = network.osize;
-                           
-                            ctx = canvas.getContext("2d");
-                            imgData = renderFunction(ctx, d_.values, network.osize, network.parameters.descrete? true : false);
-                            ctx.putImageData(imgData, 0, 0);
-                            var bitmap = canvas.toDataURL();
-                           
-                            d3.select("#outTemp").attr("xlink:href", bitmap)
-                            d3.select(".outputPattern").attr("fill", "url(#outtemp)")
-                           
-                           
-                       })
-                       .on("mouseout", function(d_){
-                           
-                            d3.select(".outputPattern").attr("fill", network.parameters.descrete ? "url(#outdescrete)": "url(#outgradient)" )
-   
-                       })
+            if (d_.id != "out") {
 
-          if(d_.layer == 1){
+                //all neurons except out 
+                var dir = "LEFT";
+                if (d_.layer != 1) {
+                    dir = "BOTH";
+                }
+                if (d_.layer == network.layers.length) {
+                    dir = "RIGHT";
+                }
 
-                var label = g.append("text")
-                .attr("x", params.o - network.nsize / 2 * 1.5)
-                .attr("y", 0)
-                .attr("pointer-events", "none")
-                .attr("text-anchor", "middle")
-                .attr("alignment-baseline", "central")
-                .text(d_.id);
+                var params = {
+                    w: network.nsize * 0.917,
+                    o: -network.nsize * 0.4585
+                };
+
+                canvas = document.createElement("canvas");
+                canvas.id = "canvas_" + i_;
+                canvas.width = network.nsize;
+                canvas.height = network.nsize * d_.values.length;
+
+                ctx = canvas.getContext("2d");
+                var imgData = renderFunction(ctx, d_.values, network.nsize);
+                ctx.putImageData(imgData, 0, 0);
+
+                var bitmap = canvas.toDataURL();
+
+                defs.append("svg:pattern")
+                    .attr("id", "pattern_" + i_)
+                    .attr("width", params.w)
+                    .attr("height", params.w)
+                    .attr("patternUnits", "userSpaceOnUse")
+                    .attr("patternTransform", "translate(" + params.o + "," + params.o + ")")
+                    .append("svg:image")
+                    .attr("xlink:href", bitmap)
+                    .attr("class", "neuronTranslate")
+                    .attr("transform", "translate(0,0)")
+                    .attr("width", params.w)
+                    .attr("height", params.w * d_.values.length)
+                    .attr("x", 0)
+                    .attr("y", 0);
+
+                var node = g.append("path")
+                    .attr("d", function(d_) {
+                        return getPlaceholder(d_, network.nsize, network.nsize / 6.0, dir)
+                    })
+                    .attr("fill", "#193D4D")
+                    .attr("stroke", "none")
+
+                var area = g.append("rect")
+                    .attr("class", "neuronPattern shifter")
+                    .attr("x", params.o)
+                    .attr("y", params.o)
+                    .attr("rx", network.nsize / 8)
+                    .attr("ry", network.nsize / 8)
+                    .attr("width", params.w)
+                    .attr("height", params.w)
+                    .attr("fill", "url(#pattern_" + i_ + ")")
+                    .attr("filter", "url(#gradiental)")
+                    .attr("stroke", "none")
+                    .on("mouseover", function(d_) {
+
+                        canvas.id = "canvas_" + i_;
+                        canvas.width = network.osize;
+                        canvas.height = network.osize * d_.values;
+
+                        ctx = canvas.getContext("2d");
+                        imgData = renderFunction(ctx, d_.values, network.osize);
+                        ctx.putImageData(imgData, 0, 0);
+                        var bitmap = canvas.toDataURL();
+
+                        canvas.id = "canvas_" + i_;
+                        canvas.width = network.osize;
+                        canvas.height = network.osize;
+
+                        ctx = canvas.getContext("2d");
+                        imgData = renderFunction(ctx, [d_.values[player.iter]], network.osize);
+                        ctx.putImageData(imgData, 0, 0);
+                        var bitmap = canvas.toDataURL();
+
+                        d3.select("#outTemp").attr("xlink:href", bitmap)
+                        d3.select(".outputPattern").attr("fill", "url(#outtemp)")
+                        d3.selectAll(".outputTranslate").attr("transform", "translate(0," + (-player.iter * network.osize) + ")");
 
 
-          }   
+                    })
+                    .on("mouseout", function(d_) {
 
-          else{
+                        d3.select(".outputPattern").attr("fill", "url(#outgradient)")
 
-                var bias = g.append("rect")
-                .attr("x", params.o - 10)
-                .attr("y", -params.o - 6)
-                .attr("width", 6)
-                .attr("height", 6)
-                .attr("fill", "#00FFFF")
-                .attr("stroke", "none")
-                .on("mouseover", function(d_){ 
-                
-                    tooltip.transition().duration(50).style("opacity", .9);
-                    tooltip.style("left", (d3.event.pageX) + "px").style("top", (d3.event.pageY) + "px");
-                    tooltip.select("#tag").html("bias");
-  
-                })
-                .on("mouseout", function(d_){ 
-                
-                    tooltip.transition().duration(250).style("opacity", 0);
-                
+                    })
+
+                if (d_.layer == 1) {
+
+                    var label = g.append("text")
+                        .attr("x", params.o - network.nsize / 2 * 1.5)
+                        .attr("y", 0)
+                        .attr("pointer-events", "none")
+                        .attr("text-anchor", "middle")
+                        .attr("alignment-baseline", "central")
+                        .text(d_.id);
+
+
+                } else {
+
+                    var bias = g.append("rect")
+                        .attr("x", params.o - 10)
+                        .attr("y", -params.o - 6)
+                        .attr("width", 6)
+                        .attr("height", 6)
+                        .attr("fill", "#00FFFF")
+                        .attr("stroke", "none")
+                        .on("mouseover", function(d_) {
+
+                            tooltip.transition().duration(50).style("opacity", .9);
+                            tooltip.style("left", (d3.event.pageX) + "px").style("top", (d3.event.pageY) + "px");
+                            tooltip.select("#tag").html("bias");
+
+                        })
+                        .on("mouseout", function(d_) {
+
+                            tooltip.transition().duration(250).style("opacity", 0);
+
+                        });
+
+                }
+
+            } else {
+
+                //out neuron [big one]
+                var canvas = document.createElement("canvas");
+                canvas.id = "canvas_" + i_;
+                canvas.width = network.osize;
+                canvas.height = network.osize * d_.values.length;
+
+                var scale = network.osize / Math.sqrt(d_.values.length);
+                var ctx = canvas.getContext("2d");
+                var imgData = renderFunction(ctx, d_.values, network.osize);
+                ctx.putImageData(imgData, 0, 0);
+
+                var bitmap = canvas.toDataURL();
+                var offset = (network.osize - network.osize) / 2 + network.osize * 0.0415;
+
+                defs.append("svg:pattern")
+                    .attr("id", "outgradient")
+                    .attr("width", network.osize)
+                    .attr("height", network.osize)
+                    .attr("patternUnits", "userSpaceOnUse")
+                    .attr("patternTransform", "translate(0," + (-network.nsize / 2) + ")")
+                    .append("svg:image")
+                    .attr("xlink:href", bitmap)
+                    .attr("class", "outputTransform")
+                    .attr("transform", "translate(0,0)")
+                    .attr("width", network.osize)
+                    .attr("height", network.osize * d_.values.length)
+                    .attr("x", 0)
+                    .attr("y", 0);
+
+                defs.append("svg:pattern")
+                    .attr("id", "outtemp")
+                    .attr("width", network.osize)
+                    .attr("height", network.osize)
+                    .attr("patternUnits", "userSpaceOnUse")
+                    .attr("patternTransform", "translate(0," + (-network.nsize / 2) + ")")
+                    .append("svg:image")
+                    .attr("id", "outTemp")
+                    .attr("xlink:href", bitmap)
+                    .attr("class", "outputTransform")
+                    .attr("width", network.osize)
+                    .attr("height", network.osize)
+                    .attr("x", 0)
+                    .attr("y", 0);
+
+                var node = g.append("path")
+                    .attr("d", function(d_) {
+                        return getOutPlaceholder(d_, network.osize, network.nsize, 8.0)
+                    })
+                    .attr("fill", "#193D4D")
+                    .attr("stroke", "none")
+
+                var area = g.append("rect")
+                    .attr("class", "outputPattern shifter")
+                    .attr("x", 0)
+                    .attr("y", -network.nsize / 2 + network.nsize * 0.0415)
+                    .attr("width", network.osize)
+                    .attr("height", network.osize - network.nsize * 0.0415)
+                    .attr("fill", "url(#outgradient)")
+                    .attr("filter", "url(#gradiental)")
+                    .attr("stroke", "none")
+
+                var sx = d3.scaleLinear().range([0, network.osize]).domain([network.output.min.x, network.output.max.x]);
+                var sy = d3.scaleLinear().range([network.osize, 0]).domain([network.output.min.y, network.output.max.y]);
+
+                var xaxis = d3.axisBottom().scale(sx).ticks(12);
+                var yaxis = d3.axisRight().scale(sy).ticks(12);
+
+                g.append("g")
+                    .attr("class", "output x_axis axes")
+                    .attr("transform", "translate(0," + (network.osize - network.nsize / 2) + ")")
+                    .call(xaxis)
+
+                g.append("g")
+                    .attr("class", "output y_axis axes")
+                    .attr("transform", "translate(" + (network.osize) + "," + (-network.nsize / 2) + ")")
+                    .call(yaxis)
+
+
+            }
+
+        });
+
+    }
+
+    function renderFunction(parent_, values_, w_, discrete_ = false) {
+
+        var out = parent_.createImageData(w_, w_ * values_.length);
+
+        for (var k = 0; k < values_.length; k++) {
+
+            var matrix2D = bilinearInterpolation2D(get2Dfrom1D(values_[k]), w_);
+            var inc = k * w_ * w_ * 4;
+
+            for (var i = 0; i < w_ * w_ * 4; i += 4) {
+
+                var x = (i / 4) % w_;
+                var y = Math.floor(i / 4 / w_);
+
+                var v = remap(matrix2D[x][y], 0, 1, -1, 1);
+                if (discrete_) {
+                    v > 0.0 ? v = 1.0 : v = -1.0;
+                }
+
+                var color = lerpHexColors(config.bw[1], config.bw[2], v);
+                if (v < 0) {
+                    color = lerpHexColors(config.bw[1], config.bw[0], Math.abs(v));
+                }
+
+                if (color == "#") {
+                    color = config.bw[1];
+                }
+                var rgb = d3.color(color);
+
+                out.data[i + inc] = rgb.r;
+                out.data[i + 1 + inc] = rgb.g;
+                out.data[i + 2 + inc] = rgb.b;
+                out.data[i + 3 + inc] = 255;
+
+            }
+
+        }
+
+        return out;
+
+    }
+
+    function create2DArray(w_) {
+
+        out = new Array(w_);
+
+        for (var i = 0; i < w_; i++) {
+
+
+            out[i] = new Array(w_);
+            for (var j = 0; j < w_; j++) {
+                out[i][j] = 0.0;
+            }
+
+
+        }
+
+        return out;
+
+    }
+
+    function get2Dfrom1D(data_) {
+
+        var w0 = Math.sqrt(data_.length);
+        var out = create2DArray(w0);
+
+        for (var i = 0; i < data_.length; i++) {
+            var x = i % w0;
+            var y = Math.floor(i / w0);
+            out[x][y] = data_[i];
+        };
+
+        return out;
+
+    }
+
+    function get1Dfrom2D(data_) {
+
+        var out = [data_.length * data_.length]
+
+        for (var x = 0; x < data_.length; ++x) {
+            for (var y = 0; y < data_[0].length; ++y) {
+
+
+            }
+        }
+
+        return out;
+
+    }
+
+    function bilinearInterpolation2D(data_, out_) {
+
+        var w0 = data_.length;
+        var out = create2DArray(out_);
+
+        for (var x = 0; x < out_; ++x) {
+            for (var y = 0; y < out_; ++y) {
+
+                var gx = x / out_ * (w0 - 1);
+                var gy = y / out_ * (w0 - 1);
+                var gxi = Math.floor(gx);
+                var gyi = Math.floor(gy);
+
+                var c00 = data_[gxi][gyi];
+                var c10 = data_[gxi + 1][gyi];
+                var c01 = data_[gxi][gyi + 1];
+                var c11 = data_[gxi + 1][gyi + 1];
+
+                out[x][y] = bilerp(c00, c10, c01, c11, gx - gxi, gy - gyi);
+
+            }
+        }
+
+        return out;
+
+    }
+
+    function lerpTwoHexColors(hexA_, hexB_, t_) {
+
+        var ah = parseInt(hexA_.replace(/#/g, ""), 16),
+            ar = ah >> 16,
+            ag = ah >> 8 & 0xFF,
+            ab = ah & 0xFF,
+            bh = parseInt(hexB_.replace(/#/g, ""), 16),
+            br = bh >> 16,
+            bg = bh >> 8 & 0xFF,
+            bb = bh & 0xFF,
+            rr = ar + t_ * (br - ar),
+            rg = ag + t_ * (bg - ag),
+            rb = ab + t_ * (bb - ab);
+
+        return "#" + ((1 << 24) + (rr << 16) + (rg << 8) + rb | 0).toString(16).slice(1);
+
+    }
+
+    function dist(x0_, y0_, x1_, y1_) {
+        return Math.sqrt((x1_ - x0_) + (y1_ - y0_));
+    }
+
+    function remap(v_, min0_, max0_, min1_, max1_) {
+        return min1_ + (v_ - min0_) / (max0_ - min0_) * (max1_ - min1_);
+    }
+
+    function getPlaceholder(d_, w_, r_, dir_) {
+
+        var out = "";
+
+        var points = [{
+            x: -w_ / 2,
+            y: -w_ / 2,
+            c: "M"
+        }, {
+            x: w_ / 2,
+            y: -w_ / 2,
+            c: "M"
+        }, {
+            x: w_ / 2,
+            y: w_ / 2,
+            c: "M"
+        }, {
+            x: -w_ / 2,
+            y: w_ / 2,
+            c: "M"
+        }];
+
+        var tmp = [],
+            l = r_ / w_,
+            N = points.length;
+
+        points.forEach(function(p_, i_) {
+
+            var add = [];
+
+            var lft = points[(N - 1) - (N - i_) % 4],
+                rht = points[(i_ + 1) % 4];
+
+            add.push({
+                x: lerp(p_.x, lft.x, l),
+                y: lerp(p_.y, lft.y, l),
+                c: "L"
+            });
+            add.push({
+                x: p_.x,
+                y: p_.y,
+                c: "S"
+            });
+            add.push({
+                x: lerp(p_.x, rht.x, l),
+                y: lerp(p_.y, rht.y, l),
+                c: ""
+            });
+
+            if (i_ == 1 && (dir_ == "LEFT" || dir_ == "BOTH")) {
+
+                var m = {
+                    x: lerp(p_.x, rht.x, 0.5),
+                    y: lerp(p_.y, rht.y, 0.5)
+                };
+
+                add.push({
+                    x: m.x,
+                    y: m.y - r_ * 0.75,
+                    c: "L"
+                });
+                add.push({
+                    x: m.x + r_ * 0.75,
+                    y: m.y,
+                    c: "L"
+                });
+                add.push({
+                    x: m.x,
+                    y: m.y + r_ * 0.75,
+                    c: "L"
                 });
 
-          }
-          
-      }
-      else{
+                d_.out = {
+                    x: m.x + r_ * 0.75,
+                    y: m.y
+                };
 
-          //out neuron [big one]
-          var canvas = document.createElement("canvas");
-          canvas.id  = "canvas_" + i_;
-          canvas.width  = network.osize;
-          canvas.height = network.osize;
+            }
 
-          var scale =  network.osize / Math.sqrt(d_.values.length);
-          var ctx = canvas.getContext("2d");
-          var imgData = renderFunction(ctx, d_.values, network.osize);
-          ctx.putImageData(imgData, 0, 0);
+            if (i_ == N - 1 && (dir_ == "RIGHT" || dir_ == "BOTH")) {
 
-          var bitmap = canvas.toDataURL();
-          var offset = (network.osize - network.osize) / 2 + network.osize * 0.0415;
-          
-          var ctx = canvas.getContext("2d");
-          var imgData2 = renderFunction(ctx, d_.values, network.osize, true);
-          ctx.putImageData(imgData2, 0, 0);
+                var m = {
+                    x: lerp(p_.x, rht.x, 0.5),
+                    y: lerp(p_.y, rht.y, 0.5)
+                };
 
-          var bitmap2 = canvas.toDataURL();
-          
-          defs.append("svg:pattern")
-          .attr("id", "outgradient" )
-          .attr("width", network.osize)
-          .attr("height", network.osize)
-          .attr("patternUnits", "userSpaceOnUse")
-          .attr("patternTransform", "translate(0," + (-network.nsize/2) + ")")
-          .append("svg:image")
-          .attr("xlink:href", bitmap)
-          .attr("width", network.osize)
-          .attr("height", network.osize)
-          .attr("x", 0)
-          .attr("y", 0);
-          
-          defs.append("svg:pattern")
-          .attr("id", "outdescrete" )
-          .attr("width", network.osize)
-          .attr("height", network.osize)
-          .attr("patternUnits", "userSpaceOnUse")
-          .attr("patternTransform", "translate(0," + (-network.nsize/2) + ")")
-          .append("svg:image")
-          .attr("xlink:href", bitmap2)
-          .attr("width", network.osize)
-          .attr("height", network.osize)
-          .attr("x", 0)
-          .attr("y", 0);
-          
-          defs.append("svg:pattern")
-          .attr("id", "outtemp" )
-          .attr("width", network.osize)
-          .attr("height", network.osize)
-          .attr("patternUnits", "userSpaceOnUse")
-          .attr("patternTransform", "translate(0," + (-network.nsize/2) + ")")
-          .append("svg:image")
-          .attr("id", "outTemp")
-          .attr("xlink:href", bitmap)
-          .attr("width", network.osize)
-          .attr("height", network.osize)
-          .attr("x", 0)
-          .attr("y", 0);
+                add.push({
+                    x: m.x,
+                    y: m.y - r_ * 0.75,
+                    c: "L"
+                });
+                add.push({
+                    x: m.x - r_ * 0.75,
+                    y: m.y,
+                    c: "L"
+                });
+                add.push({
+                    x: m.x,
+                    y: m.y + r_ * 0.75,
+                    c: "L"
+                });
 
-          var node = g.append("path")
-                       .attr("d", function(d_) { return getOutPlaceholder(d_, network.osize, network.nsize, 8.0)})
-                       .attr("fill", "#193D4D")
-                       .attr("stroke", "none")
+                d_.in = {
+                    x: m.x - r_ * 0.75,
+                    y: m.y
+                };
 
-          var area = g.append("rect")
-                       .attr("class", "outputPattern")
-                       .attr("x", 0)
-                       .attr("y", -network.nsize / 2 + network.nsize * 0.0415)
-                       .attr("width", network.osize)
-                       .attr("height", network.osize - network.nsize * 0.0415)
-                       .attr("fill", "url(#outgradient)")
-                       .attr("stroke", "none")
-          
-          var sx = d3.scaleLinear().range([0, network.osize]).domain([network.output.min.x, network.output.max.x]);
-          var sy = d3.scaleLinear().range([network.osize,0]).domain([network.output.min.y, network.output.max.y]);
-          
-          var xaxis = d3.axisBottom().scale(sx).ticks(12);
-          var yaxis = d3.axisRight().scale(sy).ticks(12);
-          
-          g.append("g")
-          .attr("class", "output x_axis axes")
-          .attr("transform", "translate(0," + (network.osize - network.nsize / 2) + ")")
-          .call(xaxis)
-          
-          g.append("g")
-          .attr("class", "output y_axis axes")
-          .attr("transform", "translate(" + (network.osize) + "," + (-network.nsize / 2) + ")")
-          .call(yaxis)
+            }
+
+            add.forEach(function(a_) {
+                tmp.push(a_);
+            });
 
 
-      }
-        
-    });
- 
-  }
-    
-  function renderFunction(parent_, values_, w_, descrete_ = false){
+        });
 
-     var matrix2D = bilinearInterpolation2D(get2Dfrom1D(values_), w_);         
-     var out = parent_.createImageData(w_, w_); 
-      
-     for(var i = 0; i < out.data.length; i += 4){
-         
-         var x = (i / 4) % w_;
-         var y = Math.floor(i / 4 / w_);
-         
-         var v = remap(matrix2D[x][y], 0, 1, -1, 1);
-         if (descrete_) {  v > 0.0 ? v = 1.0 : v = -1.0; }
-         
-         var color = lerpHexColors(config.colors[1], config.colors[2], v);
-         if(v < 0) { color = lerpHexColors(config.colors[1], config.colors[0], Math.abs(v)); }
+        points = tmp;
+        out += "M" + points[0].x + " " + points[0].y;
 
-         if(color == "#") { color = config.colors[1]; }
-         var rgb = d3.color(color);
-         
-         out.data[i] = rgb.r;
-         out.data[i + 1] = rgb.g;
-         out.data[i + 2] = rgb.b;
-         out.data[i + 3] = 255;
-         
-     }
+        points.forEach(function(p_, i_) {
 
-     return out;
-      
-  }
-    
-  function create2DArray(w_){
-      
-      out = new Array(w_);
-      
-      for(var i = 0; i < w_; i++){ 
-          
-          
-          out[i] = new Array(w_); 
-          for(var j = 0; j < w_; j++){ out[i][j] = 0.0; }
-                                 
-                                 
-      }
-      
-      return out;
-      
-  }
-    
-  function get2Dfrom1D(data_){
-      
-      var w0 = Math.sqrt(data_.length);
-      var out = create2DArray(w0);
-      
-      for(var i = 0; i < data_.length; i++) { var x = i % w0; var y = Math.floor(i / w0); out[x][y] = data_[i]; };
-      
-      return out;
-      
-  }
-    
-  function get1Dfrom2D(data_){
-      
-      var out = [data_.length * data_.length]
-      
-      for (var x = 0; x < data_.length; ++x) {
-        for (var y = 0; y < data_[0].length; ++y) {
-          
-            
-        }
-      }
-      
-      return out;
-      
-  }
-    
-  function bilinearInterpolation2D(data_, out_){
+            if (i_ != 0) {
 
-      var w0 = data_.length;
-      var out = create2DArray(out_);
-      
-      for (var x = 0; x < out_; ++x) {
-        for (var y = 0; y < out_; ++y) {
-          
-            var gx = x / out_ * (w0 - 1);
-            var gy =  y / out_ * (w0 - 1);
-            var gxi = Math.floor(gx);
-            var gyi = Math.floor(gy);
+                out += " " + points[i_].c + points[i_].x + " " + points[i_].y
 
-            var c00 = data_[gxi][gyi];
-            var c10 = data_[gxi + 1][gyi];
-            var c01 = data_[gxi][gyi + 1];
-            var c11 = data_[gxi + 1][gyi + 1];
-            
-            out[x][y] = bilerp(c00, c10, c01, c11, gx - gxi, gy - gyi);
-      
-        }
-      }
-      
-      return out;
-    
-  }
-    
-  function lerpTwoHexColors(hexA_, hexB_, t_){
-      
-      var ah = parseInt(hexA_.replace(/#/g, ""), 16),
-      ar = ah >> 16, ag = ah >> 8 & 0xFF, ab = ah & 0xFF,
-      bh = parseInt(hexB_.replace(/#/g, ""), 16),
-      br = bh >> 16, bg = bh >> 8 & 0xFF, bb = bh & 0xFF,
-      rr = ar + t_ * (br - ar),
-      rg = ag + t_ * (bg - ag),
-      rb = ab + t_ * (bb - ab);
+            }
 
-      return "#" + ((1 << 24) + (rr << 16) + (rg << 8) + rb | 0).toString(16).slice(1);
-      
-  }
-  function dist(x0_, y0_, x1_, y1_){ return Math.sqrt((x1_- x0_) + (y1_ - y0_)); }
-    
-  function remap(v_, min0_, max0_, min1_, max1_){ return min1_ + (v_ - min0_) / (max0_ - min0_) * (max1_ - min1_); }
+        })
 
-  function getPlaceholder(d_, w_, r_, dir_){
+        return out;
 
-      var out = "";
-      
-      var points = [{x: -w_/2, y: -w_/2, c: "M"}, {x: w_/2, y: -w_/2, c: "M"}, {x: w_/2, y: w_/2, c: "M"}, {x:  -w_/2, y: w_/2, c: "M"}];
-     
-      var tmp = [], l = r_/ w_, N = points.length;
-      
-      points.forEach(function(p_, i_){
+    }
 
-          var add = [];
-          
-          var lft = points[(N - 1) -(N - i_)%4],
-              rht = points[(i_ + 1)%4];
-                            
-          add.push({x: lerp(p_.x, lft.x, l), y: lerp(p_.y, lft.y, l), c: "L"});
-          add.push({x: p_.x, y: p_.y, c: "S"});
-          add.push({x: lerp(p_.x, rht.x, l), y: lerp(p_.y, rht.y, l), c: ""});
+    function getOutPlaceholder(d_, w_, off_, r_) {
 
-          if(i_ == 1 && (dir_ == "LEFT" || dir_ == "BOTH")){
-              
-              var m = { x: lerp(p_.x, rht.x, 0.5), y: lerp(p_.y, rht.y, 0.5) };
-            
-              add.push({x: m.x, y: m.y - r_ * 0.75, c: "L"});
-              add.push({x: m.x + r_ * 0.75, y: m.y, c: "L"});
-              add.push({x: m.x, y: m.y + r_ * 0.75, c: "L"});
-              
-              d_.out = {x: m.x + r_ * 0.75, y: m.y};
-       
-          }
-          
-          if(i_ == N - 1 && (dir_ == "RIGHT" || dir_ == "BOTH")){
-              
-              var m = { x: lerp(p_.x, rht.x, 0.5), y: lerp(p_.y, rht.y, 0.5) };
-            
-              add.push({x: m.x, y: m.y - r_ * 0.75, c: "L"});
-              add.push({x: m.x - r_ * 0.75, y: m.y, c: "L"});
-              add.push({x: m.x, y: m.y + r_ * 0.75, c: "L"});
-              
-              d_.in = {x: m.x - r_ * 0.75, y: m.y};
-       
-          }
-          
-          add.forEach(function(a_){ tmp.push(a_); });
-          
-          
-      });
-      
-      points = tmp;
-      out += "M" + points[0].x + " " + points[0].y;
-      
-      points.forEach(function(p_, i_){
+        var out = "",
+            dir = "RIGHT",
+            off = (w_ - off_) / 2 + off_ * 0.0415;
 
-          if(i_ != 0){
-              
-              out += " " +  points[i_].c + points[i_].x + " " + points[i_].y
-              
-          }
-          
-      })
-      
-      return out;
-      
-  }
-    
-  function getOutPlaceholder(d_, w_, off_, r_){
+        var points = [{
+            x: 0,
+            y: -w_ / 2 + off,
+            c: "M"
+        }, {
+            x: w_,
+            y: -w_ / 2 + off,
+            c: " L"
+        }, {
+            x: w_,
+            y: w_ / 2 + off - off_ * 0.0415,
+            c: " L"
+        }, {
+            x: 0,
+            y: w_ / 2 + off - off_ * 0.0415,
+            c: " L"
+        }];
 
-      var out = "", dir = "RIGHT", off = (w_ - off_) / 2 + off_ * 0.0415;
-      
-      var points = [{x: 0, y: -w_/2 + off, c: "M"}, {x: w_, y: -w_/2 + off, c: " L"}, {x: w_, y: w_/2 + off - off_ * 0.0415, c: " L"}, {x: 0, y: w_/2 + off - off_ * 0.0415, c: " L"}];
-      
-      points = [];
-      
-      points.push({x: 0, y: r_ * 0.75, c: " M"});
-      points.push({x: -off_ / 8, y: 0, c: " L"});
-      points.push({x: 0, y: -r_ * 0.75, c: " L"});
-      
-      d_.in = { x : -off_ / 8, y : 0 };
-      
-      points.forEach(function(p_, i_){
+        points = [];
 
-              out += " " + p_.c + p_.x + " " + p_.y
-   
-      })
-      
-      return out;
-      
-  }
-    
-  function lerp(v0_, v1_, t_){  return v0_ + (v1_ - v0_) * t_;  }
-    
-  function bilerp(c00_, c10_, c01_, c11_, tx_, ty_) {
-      
+        points.push({
+            x: 0,
+            y: r_ * 0.75,
+            c: " M"
+        });
+        points.push({
+            x: -off_ / 8,
+            y: 0,
+            c: " L"
+        });
+        points.push({
+            x: 0,
+            y: -r_ * 0.75,
+            c: " L"
+        });
+
+        d_.in = {
+            x: -off_ / 8,
+            y: 0
+        };
+
+        points.forEach(function(p_, i_) {
+
+            out += " " + p_.c + p_.x + " " + p_.y
+
+        })
+
+        return out;
+
+    }
+
+    function lerp(v0_, v1_, t_) {
+        return v0_ + (v1_ - v0_) * t_;
+    }
+
+    function bilerp(c00_, c10_, c01_, c11_, tx_, ty_) {
+
         return lerp(lerp(c00_, c10_, tx_), lerp(c01_, c11_, tx_), ty_);
-      
-  }
 
-  return neuron;
-    
+    }
+
+    return neuron;
+
 }
 
 //synapse visualisation
@@ -1059,7 +1277,7 @@ d3.synapse = function() {
                     tooltip.transition().duration(50).style("opacity", .9);
                     tooltip.style("left", (d3.event.pageX + 8) + "px").style("top", (d3.event.pageY + 8) + "px");
                     tooltip.select("#tag").html("weight");
-                    tooltip.select("#value").html(d_.weight.toFixed(3))
+                    tooltip.select("#value").html(d_.weight[0].toFixed(3))
 
                 })
                 .on("mouseout", function(d_) {
@@ -1071,16 +1289,16 @@ d3.synapse = function() {
 
             var visible = d3.select(this)
                 .append("path")
-                .attr("class", "sid_" + i_)
+                .attr("class", "synapselink sid_" + i_)
                 .attr("d", path)
                 .style("fill", "none")
                 .style("stroke-dasharray", "8 2")
                 .style("stroke-dashoffset", 0)
                 .style("stroke", function(d_) {
-                    return d_.weight > 0.0 ? "#79CFD9" : "#F25C05";
+                    return d_.weight[0] > 0.0 ? "#79CFD9" : "#F25C05";
                 })
                 .style("stroke-width", function(d_) {
-                    return remapFloat(Math.abs(d_.weight), 0.0, 1.0, 1.0, 3.0);
+                    return remapFloat(Math.abs(d_.weight[0]), 0.0, 1.0, 1.0, 3.0);
                 });
 
         });
@@ -1155,68 +1373,83 @@ d3.lossGraph = function() {
                 .attr("transform", "translate(" + d_.x + "," + d_.y + ")");
 
             var topLine = g.append("line")
-                          .attr("x1", 0)
-                          .attr("y1", 0)
-                          .attr("x2", d_.w)
-                          .attr("y2", 0)
-                          .attr("stroke", "#000000")
-                          .attr("stroke-width", 2)
-            
+                .attr("x1", 0)
+                .attr("y1", 0)
+                .attr("x2", d_.w)
+                .attr("y2", 0)
+                .attr("stroke", "#000000")
+                .attr("stroke-width", 2)
+
             var bottomLine = g.append("line")
-                          .attr("x1", 0)
-                          .attr("y1", d_.h)
-                          .attr("x2", d_.w)
-                          .attr("y2", d_.h)
-                          .attr("stroke", "#000000")
-                          .attr("stroke-width", 2)
-            
-            var mm = getMinMax(d_.data);
+                .attr("x1", 0)
+                .attr("y1", d_.h)
+                .attr("x2", d_.w)
+                .attr("y2", d_.h)
+                .attr("stroke", "#000000")
+                .attr("stroke-width", 2)
 
-            var loss_x = d3.scaleLinear().domain([0, mm.max.x]).range([0, d_.w]);
-            var loss_y = d3.scaleLinear().domain([0, 1]).range([4, d_.h - 4]);
-            
-            var lossLine = d3.line()
-            .x(function(d2_, i_) { return loss_x(i_); })
-            .y(function(d2_) { return loss_y(d2_.loss); })
-            .curve(d3.curveMonotoneX);
-            
-            var accLine = d3.line()
-            .x(function(d2_, i_) { return loss_x(i_); })
-            .y(function(d2_) { return loss_y(d2_.acc); })
-            .curve(d3.curveMonotoneX);
+            xloss = d3.scaleLinear().domain([0.0, 1.0]).range([0, d_.w]);
+            var y = d3.scaleLinear().domain([0.0, 1.0]).range([1, d_.h - 1]);
 
-            g.append("path")
-            .data([d_.data])
-            .attr("class", "line")
-            .attr("d", lossLine)
-            .attr("stroke", "#000000")
-            .attr("fill", "none");
-            
-             g.append("path")
-            .data([d_.data])
-            .attr("class", "line")
-            .attr("d", accLine)
-            .attr("stroke", "#0E0E0E")
-            .attr("fill", "none");
+            lossCurve = d3.line()
+                .x(function(d_, i_) {
+                    return xloss(i_);
+                })
+                .y(function(d_) {
+                    return y(d_);
+                })
+                .curve(d3.curveMonotoneX);
+
+            lossLine = g.append("path")
+                .data([network.loss[0]])
+                .attr("class", "lossline")
+                .attr("d", lossCurve)
+                .attr("stroke", "#666666")
+                .attr("fill", "none");
+
+            accCurve = d3.line()
+                .x(function(d_, i_) {
+                    return xloss(i_);
+                })
+                .y(function(d_) {
+                    return y(d_);
+                })
+                .curve(d3.curveMonotoneX);
+
+            accLine = g.append("path")
+                .data([network.acc[0]])
+                .attr("class", "accline")
+                .attr("d", accCurve)
+                .attr("stroke", "#AAAAAA")
+                .attr("fill", "none");
 
         });
 
     }
-    
-    function getMinMax(data_){
+
+    function getMinMax(data_) {
 
         var min = Math.min(data_[0].loss, data_[0].acc);
         var max = Math.max(data_[0].loss, data_[0].acc);
-        
-        for(var i = 1, l = data_.length; i < l; i++){
-            
+
+        for (var i = 1, l = data_.length; i < l; i++) {
+
             min = Math.min(min, data_[i].loss, data_[i].acc);
             max = Math.max(max, data_[i].loss, data_[i].acc);
-            
+
         }
-        
-        return { min : {x: 0, y: min}, max: { x: data_.length - 1, y: max}};
-        
+
+        return {
+            min: {
+                x: 0,
+                y: min
+            },
+            max: {
+                x: data_.length - 1,
+                y: max
+            }
+        };
+
     }
 
     return lossGraph;
@@ -1308,7 +1541,7 @@ d3.slider = function() {
     function slider(selection_) {
 
         selection_.each(function(d_, i_) {
-            
+
             var g = d3.select(this)
                 .attr("class", "slider_" + i_)
                 .attr("transform", "translate(" + grids.getXByCol(d_.gx) + "," + (grids.getYByRow(d_.gy) - 2) + ")");
@@ -1369,14 +1602,18 @@ d3.slider = function() {
         d3.select(".highlight_" + indx).attr("width", selectedValue);
 
         var range = []
-        d3.select(this).attr("id", function(d_, i_){ range = d_.range; })
-        
+        d3.select(this).attr("id", function(d_, i_) {
+            range = d_.range;
+        })
+
         var dv = remapFloat(selectedValue, 0, w, range[0], range[1])
-                             
-        d3.select(".sLabel_" + indx).text(function(d2_){ return d2_.l + dv.toFixed(d2_.decimal); })
-        
+
+        d3.select(".sLabel_" + indx).text(function(d2_) {
+            return d2_.l + dv.toFixed(d2_.decimal);
+        })
+
         config.sliders[indx].v = dv;
-        
+
         d3.event.sourceEvent.stopPropagation();
 
     }
@@ -1386,65 +1623,85 @@ d3.slider = function() {
 }
 
 d3.confusion = function() {
-    
+
     function confusion(selection_) {
-    
-         selection_.each(function(d_) {
+
+        selection_.each(function(d_) {
 
             var g = d3.select(this).attr("transform", "translate(" + d_.x + "," + d_.y + ")");
 
             g.append("rect").attr("width", d_.w).attr("height", d_.h).attr("fill", "#FFFFFF");
-             
+
             var blockWidth = (d_.w - d_.offset * 2) / d_.matrix[0].length;
             var blockHeight = (d_.h - d_.offset * 2) / d_.matrix.length;
 
             var row = g.selectAll(".confusionRow")
-            .data(d_.matrix)
-            .enter().append("g")
-            .attr("transform", function(d2_, j_){ return "translate(" + d_.offset + "," + (d_.offset + j_ * blockHeight) + ")"; })
-            .attr("class", "confusionRow");
+                .data(d_.matrix)
+                .enter().append("g")
+                .attr("transform", function(d2_, j_) {
+                    return "translate(" + d_.offset + "," + (d_.offset + j_ * blockHeight) + ")";
+                })
+                .attr("class", "confusionRow");
 
             var column = row.selectAll(".confusionBlock")
-            .data(function(d2_) { return d2_; })
-            .enter().append("rect")
-            .attr("class","confusionBlock")
-            .attr("x", function(d2_, i_) { return i_ * blockWidth; })
-            .attr("width", blockWidth )
-            .attr("height", blockHeight )
-            .style("fill", function(d2_){ return lerpHexColors(config.colors[1], config.colors[2], d2_ / 100.0); })
-            .style("stroke", function(d2_){ return lerpHexColors(config.colors[1], config.colors[2], d2_ / 100.0); });
+                .data(function(d2_) {
+                    return d2_;
+                })
+                .enter().append("rect")
+                .attr("class", "confusionBlock")
+                .attr("x", function(d2_, i_) {
+                    return i_ * blockWidth;
+                })
+                .attr("width", blockWidth)
+                .attr("height", blockHeight)
+                .style("fill", function(d2_) {
+                    return lerpHexColors(config.colors[1], config.colors[2], d2_ / 100.0);
+                })
+                .style("stroke", function(d2_) {
+                    return lerpHexColors(config.colors[1], config.colors[2], d2_ / 100.0);
+                });
 
             var ctext = row.selectAll(".confusionLabel")
-            .data(function(d_, j_) { return d_; })
-            .enter().append("text")
-            .attr("class",".confusionLabel")
-            .attr("alignment-baseline", "central")
-            .attr("text-anchor", "middle")
-            .attr("x", function(d2_, i_) { return i_ * blockWidth + blockWidth * 0.5; })
-            .attr("y", blockHeight * 0.5)
-            .style("fill", function(d2_){ if(d2_ > 50.0) { return "#FFFFFF"; }})
-            .text(function(d2_){ return Math.floor(d2_); })
-             
+                .data(function(d_, j_) {
+                    return d_;
+                })
+                .enter().append("text")
+                .attr("class", ".confusionLabel")
+                .attr("alignment-baseline", "central")
+                .attr("text-anchor", "middle")
+                .attr("x", function(d2_, i_) {
+                    return i_ * blockWidth + blockWidth * 0.5;
+                })
+                .attr("y", blockHeight * 0.5)
+                .style("fill", function(d2_) {
+                    if (d2_ > 50.0) {
+                        return "#FFFFFF";
+                    }
+                })
+                .text(function(d2_) {
+                    return Math.floor(d2_);
+                })
+
             var title = g.append("text")
-            .attr("alignment-baseline", "central")
-            .attr("text-anchor", "middle")
-            .attr("x", d_.w / 2 )
-            .attr("y", d_.offset * 0.5)
-            .text("Confusion Matrix")
+                .attr("alignment-baseline", "central")
+                .attr("text-anchor", "middle")
+                .attr("x", d_.w / 2)
+                .attr("y", d_.offset * 0.5)
+                .text("Confusion Matrix")
 
             var suntitle = g.append("text")
-            .attr("alignment-baseline", "central")
-            .attr("text-anchor", "middle")
-            .attr("x", d_.w / 2 )
-            .attr("y", d_.h - d_.offset * 0.5)
-            .text("Predicted Label")
-            
+                .attr("alignment-baseline", "central")
+                .attr("text-anchor", "middle")
+                .attr("x", d_.w / 2)
+                .attr("y", d_.h - d_.offset * 0.5)
+                .text("Predicted Label")
+
             var titleY = g.append("text")
-            .attr("transform", "translate(" + d_.offset * 0.5 + "," + (d_.h / 2) + ")rotate(-90)")
-            .attr("alignment-baseline", "central")
-            .attr("text-anchor", "middle")
-            .text("True Label")
-            
+                .attr("transform", "translate(" + d_.offset * 0.5 + "," + (d_.h / 2) + ")rotate(-90)")
+                .attr("alignment-baseline", "central")
+                .attr("text-anchor", "middle")
+                .text("True Label")
+
             var cm_x = d3.scaleLinear().domain([-1, 1]).range([d_.offset, d_.offset + d_.w - d_.offset * 2]);
 
             var cm_y = d3.scaleLinear().domain([-1, 1]).range([d_.offset, d_.offset + d_.h - d_.offset * 2]);
@@ -1452,47 +1709,47 @@ d3.confusion = function() {
             var xAxis = d3.axisBottom(cm_x).ticks(2);
 
             g.append("g")
-            .attr("transform", "translate(0," + (d_.h - d_.offset) + ")")
-            .call(xAxis);
+                .attr("transform", "translate(0," + (d_.h - d_.offset) + ")")
+                .call(xAxis);
 
-            var yAxis = d3.axisLeft(cm_y).ticks(2); 
+            var yAxis = d3.axisLeft(cm_y).ticks(2);
             g.append("g")
-            .attr("transform", "translate(" + d_.offset + ",0)")
-            .call(yAxis);
-             
+                .attr("transform", "translate(" + d_.offset + ",0)")
+                .call(yAxis);
+
             //gradient legend
             var cm_grad = d3.scaleLinear().domain([100.0, 0.0]).range([d_.offset, d_.offset + d_.h - d_.offset * 2]);
-             
-            var gradAxis = d3.axisRight(cm_grad).ticks(5); 
+
+            var gradAxis = d3.axisRight(cm_grad).ticks(5);
             g.append("g")
-            .attr("transform", "translate(" + (d_.w - d_.offset * 0.85 + blockWidth * 0.25) + ",0)")
-            .call(gradAxis);
+                .attr("transform", "translate(" + (d_.w - d_.offset * 0.85 + blockWidth * 0.25) + ",0)")
+                .call(gradAxis);
 
             var cmGradient = svg.append("defs")
-            .append("linearGradient")
-            .attr("gradientTransform", "rotate(90)")
-            .attr("id", "cm-gradient");
+                .append("linearGradient")
+                .attr("gradientTransform", "rotate(90)")
+                .attr("id", "cm-gradient");
 
             cmGradient.append("stop")
-            .attr("offset", "0%")
-            .attr("stop-color", config.colors[2]);
+                .attr("offset", "0%")
+                .attr("stop-color", config.colors[2]);
 
             cmGradient.append("stop")
-            .attr("offset", "100%")
-            .attr("stop-color", config.colors[1]);
+                .attr("offset", "100%")
+                .attr("stop-color", config.colors[1]);
 
             var cm_gradient = g.append("rect")
-            .attr("transform", "translate(" + (d_.w - d_.offset * 0.85) + "," + d_.offset + ")")
-            .attr("width", blockWidth * 0.25)
-            .attr("height", d_.h - d_.offset * 2)
-            .style("fill", "url(#cm-gradient)")
-             
-         });
-          
+                .attr("transform", "translate(" + (d_.w - d_.offset * 0.85) + "," + d_.offset + ")")
+                .attr("width", blockWidth * 0.25)
+                .attr("height", d_.h - d_.offset * 2)
+                .style("fill", "url(#cm-gradient)")
+
+        });
+
     }
-    
+
     return confusion;
-    
+
 }
 
 d3.json("config.json", function(error_, config_) {
@@ -1500,28 +1757,107 @@ d3.json("config.json", function(error_, config_) {
     if (error_) throw error_;
     config = config_;
 
-    d3.json("data/streamed_data_epoch-" + player.iter + ".json", function(error_, data_) {
-        
-        network.loss = data_.loss;
-        network.accuracy = data_.acc;
-        network.vloss = data_.val_loss;
-        network.vaccuracy = data_.val_acc;
-        
+    d3.json("data/streamed_data.json", function(error_, data_) {
+
+        player.setLimits(data_.epochs[0], data_.epochs[1]);
+        setTopUI(data_.options);
         parseNetworkData(data_);
         inits();
-        
+
     });
 
 });
 
-function inits(){
-    
+function inits() {
+
     console.log("%cneural network playground", "color: #494949; font-size: 18px; font-family: sans-serif;");
     console.log("%cby Vladimir V KUCHINOV", "color: #494949; font-size: 12px; font-style: italic;font-family: sans-serif;");
-    
-    //by now from config.json, have to be from JSON coming from Keras server
-    //with the same structure and syntax
-    config.top.forEach(function(d_) {
+
+    var dims = "" + 0 + " " + 0 + " " + (config.w + config.margin.l + config.margin.r) + " " + config.h + (config.margin.t + config.margin.b);
+
+    svg = d3.select("#" + config.parentDiv).append("svg")
+        .attr("id", "nn", true)
+        .attr("preserveAspectRatio", "xMinYMin meet")
+        .attr("viewBox", dims)
+        .classed("svg-content", true);
+
+    defs = svg.append("svg:defs");
+
+    //tooltip
+    tooltip = d3.select("#tooltip");
+    tooltip.moveToFront();
+
+    //init grids
+    grids = new Grids(svg, config.grids);
+    grids.show();
+
+    //taken from config.labels & config.hints
+    //x, y have grids units
+    drawBlockLabels();
+    drawBlockHints();
+
+    //draw sliders using data from config.json
+    //to get current value call getSliderValue(name_);
+    //x, y, w, h have grids units
+    drawUISliders();
+
+    //x, y, w, h have grids units
+    rebuildAndDrawNetwork(32, 224, 3, 3, 25, 12);
+
+    //simple point-based input with white background
+    //drawInputPointsData(0, 3, 4);
+
+    //it's a mockup, have to be taken from JSON coming
+    //from Keras server, network.input.values as float array
+    drawInputPatternData(0, 3, 4, network.input.values);
+
+    //loss graph
+    drawLossGraph(28, 1, 3, 1);
+
+    //confusion matrix
+    //it's a mockup, have to be taken from JSON coming
+    //from Keras server, network.matrix as two-dimensional float array
+    drawConfusionMatrix(network.matrix, 24, 11, 7, 5, 48);
+
+    //update output loss/accuracy values
+    update(0, player.limits);
+    updateTestLosses();
+
+}
+
+function update(iter_, limits_) {
+
+
+    d3.selectAll(".neuronTranslate").attr("transform", "translate(0," + (-player.iter * network.nsize * 0.917) + ")");
+
+    d3.selectAll(".outputTranslate").attr("transform", "translate(0," + (-player.iter * network.osize) + ")");
+
+    d3.selectAll(".synapselink").style("stroke", function(d_) {
+            return d_.weight[player.iter] > 0.0 ? "#79CFD9" : "#F25C05";
+        })
+        .style("stroke-width", function(d_) {
+            return remapFloat(Math.abs(d_.weight[player.iter]), 0.0, 1.0, 1.0, 3.0);
+        });
+
+    d3.select("#iter-number").node().innerHTML = Number((iter_ + limits_[0]) / 1000).toLocaleString("en-US", {
+        minimumIntegerDigits: 3,
+        minimumFractionDigits: 3,
+        useGrouping: false
+    });
+
+
+    xloss.domain([0.0, player.iter]);
+    accLine.data([network.acc.slice(0, player.iter + 1)]).attr("d", accCurve);
+    lossLine.data([network.loss.slice(0, player.iter + 1)]).attr("d", lossCurve);
+
+    //losses
+    updateTestLosses();
+
+}
+
+function setTopUI(options_) {
+
+    options_.forEach(function(d_) {
 
         var div = document.createElement("div");
         div.className = "control ui-" + d_.id;
@@ -1556,65 +1892,25 @@ function inits(){
         document.getElementById("top-ui").appendChild(div)
 
     });
-    
-    var dims = "" + 0 + " " + 0 + " " + (config.w + config.margin.l + config.margin.r) + " " + config.h + (config.margin.t + config.margin.b);
 
-    svg = d3.select("#" + config.parentDiv).append("svg")
-        .attr("id", "nn", true)
-        .attr("preserveAspectRatio", "xMinYMin meet")
-        .attr("viewBox", dims)
-        .classed("svg-content", true);
-    
-    defs = svg.append("svg:defs");
-
-    //tooltip
-    tooltip = d3.select("#tooltip");
-    tooltip.moveToFront();
-
-    //init grids
-    grids = new Grids(svg, 32, 16, 0);
-    grids.show();
-
-    //taken from config.labels & config.hints
-    //x, y have grids units
-    drawBlockLabels();
-    drawBlockHints(); 
-    
-    //draw sliders using data from config.json
-    //to get current value call getSliderValue(name_);
-    //x, y, w, h have grids units
-    drawUISliders(); 
-
-    //x, y, w, h have grids units
-    rebuildAndDrawNetwork(32, 224, 3, 3, 25, 12);
-
-    //simple point-based input with white background
-    //drawInputPointsData(0, 3, 4);
-    
-    //it's a mockup, have to be taken from JSON coming
-    //from Keras server, network.input.values as float array
-    drawInputPatternData(0, 3, 4, network.input.values);
-    
-    //confusion matrix
-    //it's a mockup, have to be taken from JSON coming
-    //from Keras server, network.matrix as two-dimensional float array
-    drawConfusionMatrix(network.matrix, 24, 11, 7, 5, 48);
-    
-    //update output loss/accuracy values
-    document.getElementById("loss").innerHTML = document.getElementById("loss").innerHTML.replace("{loss}", network.loss.toFixed(3)).replace("{accuracy}", network.accuracy.toFixed(3))
-    document.getElementById("vloss").innerHTML = document.getElementById("vloss").innerHTML.replace("{vloss}", network.vloss.toFixed(3)).replace("{vaccuracy}", network.vaccuracy.toFixed(3));
-    
 }
 
 function rebuildAndDrawNetwork(nsize_, osize_, gx_, gy_, gw_, gh_) {
 
-    var params = { nsize: nsize_, osize : osize_, x: grids.getXByCol(gx_), y: grids.getYByRow(gy_), w: grids.getWidthByCols(0, gw_), h: grids.getHeightByRows(0, gh_) };
+    var params = {
+        nsize: nsize_,
+        osize: osize_,
+        x: grids.getXByCol(gx_),
+        y: grids.getYByRow(gy_),
+        w: grids.getWidthByCols(0, gw_),
+        h: grids.getHeightByRows(0, gh_)
+    };
 
     network.nsize = params.nsize;
     network.osize = params.osize;
 
     var net = {};
-    
+
     network.neurons.forEach(function(d_) {
 
         if (d_.layer in net) {
@@ -1628,27 +1924,22 @@ function rebuildAndDrawNetwork(nsize_, osize_, gx_, gy_, gw_, gh_) {
 
     network.layers = []
     Object.keys(net).forEach(function(k_) {
-        
+
         network.layers.push({
             i: k_,
             n: net[k_]
-            
+
         });
     })
 
-    var largestLayerSize = Math.max.apply(null, Object.keys(net).map(function(i_) { return net[i_]; }));
+    var largestLayerSize = Math.max.apply(null, Object.keys(net).map(function(i_) {
+        return net[i_];
+    }));
 
     var xdist = params.w / Object.keys(net).length,
         ydist = params.h / largestLayerSize;
 
     network.neurons.map(function(d_) {
-
-        d_.values.forEach(function(v_) {
-
-            //config.minmax.min = Math.min(config.minmax.min, Number(v_));
-            //config.minmax.max = Math.max(config.minmax.max, Number(v_));
-
-        })
 
         if (d_.lidx == 1) {
             getObjectByKey(network.layers, "i", d_.layer).x = params.x + (d_.layer - 0.5) * xdist;
@@ -1663,14 +1954,16 @@ function rebuildAndDrawNetwork(nsize_, osize_, gx_, gy_, gw_, gh_) {
 
     });
 
-    network.neurons.filter(function(d_) { return typeof d_ !== "undefined"; });
-    
+    network.neurons.filter(function(d_) {
+        return typeof d_ !== "undefined";
+    });
+
     drawNetwork();
     drawOutputLegend(26, 9, 160, 16);
-    
+
 }
 
-function drawOutputLegend(gx_, gy_, w_, h_){
+function drawOutputLegend(gx_, gy_, w_, h_) {
 
     var lgradient = svg.append("defs")
         .append("linearGradient")
@@ -1678,107 +1971,63 @@ function drawOutputLegend(gx_, gy_, w_, h_){
 
     lgradient.append("stop")
         .attr("offset", "0%")
-        .attr("stop-color", config.colors[0])
+        .attr("stop-color", config.bw[0])
         .attr("stop-opacity", 1);
 
     lgradient.append("stop")
         .attr("offset", "33%")
-        .attr("stop-color", lerpHexColors(config.colors[0], config.colors[1], 0.5))
+        .attr("stop-color", lerpHexColors(config.bw[0], config.bw[1], 0.5))
         .attr("stop-opacity", 1);
 
     lgradient.append("stop")
         .attr("offset", "50%")
-        .attr("stop-color", config.colors[1])
+        .attr("stop-color", config.bw[1])
         .attr("stop-opacity", 1);
 
     lgradient.append("stop")
         .attr("offset", "66%")
-        .attr("stop-color", lerpHexColors(config.colors[1], config.colors[2], 0.5) )
+        .attr("stop-color", lerpHexColors(config.bw[1], config.bw[2], 0.5))
         .attr("stop-opacity", 1);
 
     lgradient.append("stop")
         .attr("offset", "100%")
-        .attr("stop-color", config.colors[2])
+        .attr("stop-color", config.bw[2])
         .attr("stop-opacity", 1);
 
-    var ldescrete = svg.append("defs")
-            .append("linearGradient")
-            .attr("id", "ldescrete");
+    var legend = svg.append("rect")
+        .attr("class", "shifter")
+        .attr("x", grids.getXByCol(gx_))
+        .attr("y", grids.getYByRow(gy_))
+        .attr("width", w_)
+        .attr("height", h_)
+        .attr("fill", "url(#lgradient)")
+        .attr("filter", "url(#gradiental)")
+        .attr("stroke", "none")
+        .on("click", function(d_) {
 
-    ldescrete.append("stop")
-        .attr("offset", "0%")
-        .attr("stop-color", config.colors[0])
-        .attr("stop-opacity", 1);
+            network.parameters.discrete ^= true;
 
-    ldescrete.append("stop")
-        .attr("offset", "50%")
-        .attr("stop-color", config.colors[0])
-        .attr("stop-opacity", 1);
+            if (network.parameters.discrete) {
 
-    ldescrete.append("stop")
-        .attr("offset", "50%")
-        .attr("stop-color", config.colors[2])
-        .attr("stop-opacity", 1);
+                d3.selectAll(".shifter").attr("filter", "url(#discrete)");
 
-   var legend = svg.append("rect")
-               .attr("x", grids.getXByCol(gx_))
-               .attr("y", grids.getYByRow(gy_))
-               .attr("width", w_)
-               .attr("height", h_)
-               .attr("fill", "url(#lgradient)")
-               .attr("stroke", "none")
-                .on("click", function(d_){
+            } else {
 
-                network.parameters.descrete ^= true;
+                d3.selectAll(".shifter").attr("filter", "url(#gradiental)")
 
-                    if(network.parameters.descrete){
+            }
 
-                        d3.select(this).attr("fill", "url(#ldescrete)");
-                        neurons.attr("id", function(d_, i_) { 
+        });
 
-                            if(d_.id != "out"){
+    var lx = d3.scaleLinear().range([grids.getXByCol(gx_), grids.getXByCol(gx_) - w_]).domain([-1.0, 1.0]);
 
-                                d3.select(this).select(".neuronPattern").attr("fill", "url(#descrete_" + i_ + ")")
+    var laxis = d3.axisBottom().scale(lx).ticks(3);
 
-                            }else{
+    svg.append("g")
+        .attr("class", "output l_axis axes")
+        .attr("transform", "translate(" + w_ + "," + (grids.getYByRow(gy_) + h_) + ")")
+        .call(laxis)
 
-                                d3.select(this).select(".outputPattern").attr("fill", "url(#outdescrete)")
-
-                            }
-
-                        });
-
-                    }
-                    else{
-
-                        d3.select(this).attr("fill", "url(#lgradient)");
-                        neurons.attr("id", function(d_, i_) { 
-
-                            if(d_.id != "out"){
-
-                                d3.select(this).select(".neuronPattern").attr("fill", "url(#pattern_" + i_ + ")")
-
-                            }else{
-
-                                d3.select(this).select(".outputPattern").attr("fill", "url(#outgradient)")
-
-                            }
-
-                        });
-
-                    }
-
-                });
-
-  var lx = d3.scaleLinear().range([ grids.getXByCol(gx_),  grids.getXByCol(gx_) - w_]).domain([-1.0, 1.0]);
-
-  var laxis = d3.axisBottom().scale(lx).ticks(3);
-
-  svg.append("g")
-  .attr("class", "output l_axis axes")
-  .attr("transform", "translate(" + w_ + "," + (grids.getYByRow(gy_) + h_) + ")")
-  .call(laxis)
-    
 }
 
 function setFromTo(d_) {
@@ -1789,145 +2038,214 @@ function setFromTo(d_) {
 
 }
 
-function drawConfusionMatrix(matrix_, gx_, gy_, gw_, gh_, offset_){
-    
-     var confusionMatrix = svg.selectAll(".confusionMatrix")
-     .data([{ matrix : matrix_, x: grids.getXByCol(gx_), y: grids.getYByRow(gy_), w: grids.getWidthByCols(0, gw_), h: grids.getHeightByRows(0, gh_), offset : offset_ }])
-    .enter().append("g")
-    .attr("id", "confusionMatrix")
-    .call(d3.confusion());
-    
+
+function updateTestLosses() {
+
+    document.getElementById("loss").childNodes[0].textContent = "Loss: " + network.loss[player.iter].toFixed(3);
+    document.getElementById("loss").childNodes[1].textContent = "Accuracy: " + network.acc[player.iter].toFixed(3);
+
+    document.getElementById("val_loss").childNodes[0].textContent = "Value Loss: " + network.val_loss[player.iter].toFixed(3);
+    document.getElementById("val_loss").childNodes[1].textContent = "Value Accuracy: " + network.val_acc[player.iter].toFixed(3);
+
+
 }
-function drawNetwork(){
-    
+
+function drawConfusionMatrix(matrix_, gx_, gy_, gw_, gh_, offset_) {
+
+    var confusionMatrix = svg.selectAll(".confusionMatrix")
+        .data([{
+            matrix: matrix_,
+            x: grids.getXByCol(gx_),
+            y: grids.getYByRow(gy_),
+            w: grids.getWidthByCols(0, gw_),
+            h: grids.getHeightByRows(0, gh_),
+            offset: offset_
+        }])
+        .enter().append("g")
+        .attr("id", "confusionMatrix")
+        .call(d3.confusion());
+
+}
+
+function drawNetwork() {
+
     var everyHiddenUI = svg.selectAll(".neuron")
-    .data(getHiddenLayers())
-    .enter().append("g")
-    .attr("transform", function(d_) {
-    d_.y += config.default.lessmore.w * 0.75;
-    return "translate(" + d_.x + "," + d_.y + ")";
-    })
-    .call(d3.lessmore());
-    
+        .data(getHiddenLayers())
+        .enter().append("g")
+        .attr("transform", function(d_) {
+            d_.y += config.default.lessmore.w * 0.75;
+            return "translate(" + d_.x + "," + d_.y + ")";
+        })
+        .call(d3.lessmore());
+
     neurons = svg.selectAll(".neuron")
-    .data(network.neurons)
-    .enter().append("g")
-    .attr("class", function(d_) { return "neuron " + "nid_" + d_.id; })
-    .attr("transform", function(d_, i_) {
-        
-        if(i_ == 0) { config.offsetY = d_.y; }
-        return "translate(" + d_.x + "," + d_.y + ")";
-        
-    })
-    .call(d3.neuron());
-    
+        .data(network.neurons)
+        .enter().append("g")
+        .attr("class", function(d_) {
+            return "neuron " + "nid_" + d_.id;
+        })
+        .attr("transform", function(d_, i_) {
+
+            if (i_ == 0) {
+                config.offsetY = d_.y;
+            }
+            return "translate(" + d_.x + "," + d_.y + ")";
+
+        })
+        .call(d3.neuron());
+
     synapses = svg.selectAll(".synapse")
-    .data(network.synapses)
-    .enter().append("g")
-    .attr("class", function(d_) { return "synapse " + setFromTo(d_); })
-    .call(d3.synapse())
+        .data(network.synapses)
+        .enter().append("g")
+        .attr("class", function(d_) {
+            return "synapse " + setFromTo(d_);
+        })
+        .call(d3.synapse())
 
     d3.selectAll(".synapse").moveToBack();
-    
+
     var params = getHiddenLayersMedian();
     var hiddenUI = svg.append("g").attr("transform", "translate(" + params.median + ", " + Number(grids.getYByRow(1)) + ")");
 
     hiddenUI.append("path")
-    .attr("d", lineToBracePath(params))
-    .attr("fill", "none")
-    .attr("stroke", "#B7B7B7");
+        .attr("d", lineToBracePath(params))
+        .attr("fill", "none")
+        .attr("stroke", "#B7B7B7");
 
     hiddenUI.append("g")
-    .data([{
-        
+        .data([{
+
             x: 0,
             y: 40,
             label: setHiddenLabel()
-            
-    }])
-    .attr("transform", function(d_) { return "translate(" + d_.x + "," + d_.y + ")"; })
-    .call(d3.lessmore());
-    
-    //by now there are two params: loss & accuracy
-    //no vloss, no vaccuracy
-    drawLossGraph(network.testloss, 28, 1, 3, 1);
-    
+
+        }])
+        .attr("transform", function(d_) {
+            return "translate(" + d_.x + "," + d_.y + ")";
+        })
+        .call(d3.lessmore());
+
 }
 
-function getSliderValueByID(id_){
+function mergeTestData(array_) {
 
-    var obj =  config.sliders.find(function(v_){ return v_["id"] === id_});
+    var out = [];
+
+    for (var i = 0, l = array_[0].length; i < l; i++) {
+
+        out.push({
+            loss: array_[0][i],
+            acc: array_[1][i]
+        });
+
+    }
+
+    return out;
+
+}
+
+function getSliderValueByID(id_) {
+
+    var obj = config.sliders.find(function(v_) {
+        return v_["id"] === id_
+    });
     return obj.v;
-    
+
 }
 
 function filterValue(obj_, key_, value_) {
-  return obj_.find(function(v_){ return v_[key_] === value_});
+    return obj_.find(function(v_) {
+        return v_[key_] === value_
+    });
 }
 
-function drawLossGraph(data_, gx_, gy_, gw_, gh_){
-    
-     var lossGraph = svg.selectAll(".lossGraph")
-     .data([{ data : data_, x: grids.getXByCol(gx_), y: grids.getYByRow(gy_), w: grids.getWidthByCols(0, gw_), h: grids.getHeightByRows(0, gh_) }])
-    .enter().append("g")
-    .attr("id", "lossGraph")
-    .call(d3.lossGraph());
-    
+function drawLossGraph(gx_, gy_, gw_, gh_) {
+
+    var lossGraph = svg.selectAll(".lossGraph")
+        .data([{
+            x: grids.getXByCol(gx_),
+            y: grids.getYByRow(gy_),
+            w: grids.getWidthByCols(0, gw_),
+            h: grids.getHeightByRows(0, gh_)
+        }])
+        .enter().append("g")
+        .attr("id", "lossGraph")
+        .call(d3.lossGraph());
+
 }
 
-function drawInputPointsData(gx_, gy_, gw_){
-    
+function drawInputPointsData(gx_, gy_, gw_) {
+
     var inData = svg.selectAll(".inputPointsData")
-    .data([{ x: grids.getXByCol(gx_), y: grids.getYByRow(gy_), w: grids.getWidthByCols(0, gw_), h: grids.getWidthByCols(0, gw_) }])
-    .enter().append("g")
-    .attr("id", "inputPointsData")
-    .call(d3.inputPointsData());
-    
+        .data([{
+            x: grids.getXByCol(gx_),
+            y: grids.getYByRow(gy_),
+            w: grids.getWidthByCols(0, gw_),
+            h: grids.getWidthByCols(0, gw_)
+        }])
+        .enter().append("g")
+        .attr("id", "inputPointsData")
+        .call(d3.inputPointsData());
+
 }
 
-function drawInputPatternData(gx_, gy_, gw_, values_){
-    
+function drawInputPatternData(gx_, gy_, gw_, values_) {
+
     var inData = svg.selectAll(".inputPatternData")
-    .data([{ x: grids.getXByCol(gx_), y: grids.getYByRow(gy_), w: grids.getWidthByCols(0, gw_), h: grids.getWidthByCols(0, gw_), values: values_ }])
-    .enter().append("g")
-    .attr("id", "inputPatternData")
-    .call(d3.inputPatternData());
-    
+        .data([{
+            x: grids.getXByCol(gx_),
+            y: grids.getYByRow(gy_),
+            w: grids.getWidthByCols(0, gw_),
+            h: grids.getWidthByCols(0, gw_),
+            values: values_
+        }])
+        .enter().append("g")
+        .attr("id", "inputPatternData")
+        .call(d3.inputPatternData());
+
 }
 
-function drawUISliders(){
-    
+function drawUISliders() {
+
     var sliders = svg.selectAll(".slider")
-    .data(config.sliders)
-    .enter().append("g")
-    .call(d3.slider());
-    
+        .data(config.sliders)
+        .enter().append("g")
+        .call(d3.slider());
+
 }
 
-function drawBlockLabels(){
-    
+function drawBlockLabels() {
+
     var labels = svg.selectAll(".labels")
-    .data(config.labels)
-    .enter().append("text")
-    .attr("class", "block_label")
-    .attr("alignment-baseline", "hanging")
-    .attr("dx", function(d_, i_) { return grids.getXByCol(d_.gx); })
-    .attr("dy", function(d_, i_) { return grids.getYByRow(d_.gy); })
-    .text(function(d_) { return d_.l; })
-        
+        .data(config.labels)
+        .enter().append("text")
+        .attr("class", "block_label")
+        .attr("alignment-baseline", "hanging")
+        .attr("dx", function(d_, i_) {
+            return grids.getXByCol(d_.gx);
+        })
+        .attr("dy", function(d_, i_) {
+            return grids.getYByRow(d_.gy);
+        })
+        .text(function(d_) {
+            return d_.l;
+        })
+
 }
 
-function drawBlockHints(){
-    
+function drawBlockHints() {
+
     var hints = svg.selectAll(".hints")
-    .data(config.hints)
-    .enter().append("text")
-    .attr("class", "block_hint")
-    .attr("id", function(d_){ return(d_.id); })
-    .html(function(d_) {
-    return multiline(d_.l, Number(grids.getXByCol(d_.gx)), 10 + Number(grids.getYByRow(d_.gy)), 16);
-    })
-       
+        .data(config.hints)
+        .enter().append("text")
+        .attr("class", "block_hint")
+        .attr("id", function(d_) {
+            return (d_.id);
+        })
+        .html(function(d_) {
+            return multiline(d_.l, Number(grids.getXByCol(d_.gx)), 10 + Number(grids.getYByRow(d_.gy)), 16);
+        })
+
 }
 
 function setHiddenLabel() {
@@ -1993,12 +2311,16 @@ function lineToBracePath(p_) {
 
 }
 
-function parseNetworkData(data_){
-    
-    data_.activations.data.forEach(function(d_){
-        
+function parseNetworkData(data_) {
+
+    data_.neurons.forEach(function(d_) {
+
         d_.layer++;
-        if(d_.layer == 1) { d_.id = "in_" + d_.node; } else { d_.id = "h_" + d_.layer + "_" + d_.node; }
+        if (d_.layer == 1) {
+            d_.id = "in_" + d_.node;
+        } else {
+            d_.id = "h_" + d_.layer + "_" + d_.node;
+        }
         d_.node++;
         network.neurons.push(d_);
 
@@ -2007,57 +2329,86 @@ function parseNetworkData(data_){
     network.neurons[network.neurons.length - 1].id = "out";
     var outIndex = network.neurons[network.neurons.length - 1].layer;
 
-    data_.weights.forEach(function(d_){ 
-        
-        if(d_.source != -1) { 
+    data_.weights.forEach(function(d_) {
+
+        if (d_.source != -1) {
 
             d_.from_layer++;
-            if(d_.from_layer < outIndex){ 
+            if (d_.from_layer < outIndex) {
 
-            d_.source++;
-            d_.target++;
+                d_.source++;
+                d_.target++;
 
-            if(d_.from_layer == outIndex - 1) { if(d_.target == 1) { network.synapses.push(d_); }}
-            else { network.synapses.push(d_); }
+                if (d_.from_layer == outIndex - 1) {
+                    if (d_.target == 1) {
+                        network.synapses.push(d_);
+                    }
+                } else {
+                    network.synapses.push(d_);
+                }
 
             }
 
-        } 
-    
+        }
+
     });
 
+    network.acc = data_.acc;
+    network.loss = data_.loss;
+    network.val_acc = data_.val_acc;
+    network.val_loss = data_.val_loss;
+
+    network.output = {
+        min: 0.0,
+        max: 1.0
+    };
+
+    network.input = {};
     network.input.points = [];
-    network.input.min = {x: Number.POSITIVE_INFINITY, y: Number.POSITIVE_INFINITY};
-    network.input.max = {x: Number.NEGATIVE_INFINITY, y: Number.NEGATIVE_INFINITY};
+    network.input.values = data_.input.values;
 
-    data_.activations.x_axis.forEach(function(d_, i_){
+    network.input.min = {
+        x: Number.POSITIVE_INFINITY,
+        y: Number.POSITIVE_INFINITY
+    };
+    network.input.max = {
+        x: Number.NEGATIVE_INFINITY,
+        y: Number.NEGATIVE_INFINITY
+    };
 
-    network.input.points.push({x: d_, y: data_.activations.y_axis[i_]});
-    network.input.min.x = Math.min(network.input.min.x, d_);
-    network.input.max.x = Math.max(network.input.max.x, d_);
-    network.input.min.y = Math.min(network.input.min.y, data_.activations.y_axis[i_]);
-    network.input.max.y = Math.max(network.input.max.y, data_.activations.y_axis[i_]);
+    data_.input.points.forEach(function(d_, i_) {
+
+        network.input.points.push({
+            x: d_.x,
+            y: d_.y,
+            v: d_.v
+        });
+        network.input.min.x = Math.min(network.input.min.x, d_.x);
+        network.input.max.x = Math.max(network.input.max.x, d_.x);
+        network.input.min.y = Math.min(network.input.min.y, d_.y);
+        network.input.max.y = Math.max(network.input.max.y, d_.y);
 
     })
-    
+
+
     expandArea();
-    
+
 }
 
-function expandArea(){
-    
+function expandArea() {
+
     var dx = network.input.max.x - network.input.min.x;
     var dy = network.input.max.y - network.input.min.y;
-    
+
     var deltaX = dx * 0.2;
     var deltaY = dy * 0.2;
-    
+
     network.input.min.x -= deltaX;
     network.input.max.x += deltaX;
-    
+
     network.input.min.y -= deltaY;
     network.input.max.y += deltaY;
-      
+
 }
 
 function multiline(text_, dx_, dy_, line_) {
