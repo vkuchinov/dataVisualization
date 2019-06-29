@@ -1789,7 +1789,7 @@ function inits() {
 
     //init grids
     grids = new Grids(svg, config.grids);
-    grids.show();
+    //grids.show();
 
     //taken from config.labels & config.hints
     //x, y have grids units
