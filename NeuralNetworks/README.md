@@ -193,3 +193,30 @@ The same for sliders.
 The only interaction which could be done at this stage is a player along with some minor actions.
 
 [![IMAGE ALT TEXT](http://img.youtube.com/vi/yKCi5DJwF4k/0.jpg)](http://www.youtube.com/watch?v=yKCi5DJwF4k "Demo")
+
+# The Mockup JSON data
+
+Despite TensorFlow Playground, the current layout is built by grids and guidelines.
+
+![UI/UX](https://github.com/vkuchinov/dataVisualization/blob/master/NeuralNetworks/references/grids.png?raw=true)
+
+In this case, most of rendering functions have grids units, instead of pixels or ems.
+
+For example, drawConfusionMatrix(matrix_, gx_, gy_, gw_, gh_, offset_), where gx_, gy_, gw_ and gh_ are mesaured in grids, so if you want to place the confusion matrix at second row and third column and size 1x1, you have to call drawConfusionMatrix({data}, 3, 2, 1, 1);
+
+The Grids objects has several helpers, like getXByCol(value), getYByRow(value), getWidthByCols(value1, value2), getHeightByRows(value1, value2), which return standard XY coordinates in pixels.
+
+grids.show() shows the guidelines
+grids.hide() hides them
+
+If you want to set gaps between blocks, just replace gap with any value at config.json
+
+```
+"grids" : { "cols" : 32, "rows" : 16, "gap" : 0 },
+```
+# config.json
+
+The general setting for the whole D3.JS widget, like overall width, height and colour schemes.
+
+
+
