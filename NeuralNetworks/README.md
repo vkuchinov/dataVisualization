@@ -220,5 +220,49 @@ If you want to set gaps between blocks, just replace gap with any value at confi
 
 The general setting for the whole D3.JS widget, like overall width, height and colour schemes.
 
+```
+...
+parentDiv : "network", parent div
+w : 1024, interface width
+h : 682, interface height
+grids : { cols : 32, rows : 16, gap : 0 },
+margin : { t : 32, r : 32, b : 32, l : 32 },
+minmax : { min : 0.0,  max  : 1.0 }, //service parameter, don't change
+colors : ["#F25C05", "#FFFFFF", "#79CFD9"], //the main gradient, feel free to play with its colours
+bw : ["#000000", "#808080", "#FFFFFF"], //service gradient, please don't change it
+
+ "default" : {
+        
+        "slider" : { "w" : 140 }, //sliders width
+        "lessmore" : { "w" : 16 } // +/- button size
+        
+    },
+    
+    "labels" : [
+        
+        {"l": "DATA", "gx": 0, "gy" : 0},
+        {"l" : "FEATURES", "gx" : 5, "gy" : 0 }, 
+        {"l" : "OUTPUT", "gx" : 24, "gy" : 0 }
+        
+    ],
+    
+    "hints" : [
+        
+        {"id": "dataset", "l" : "Which dataset|do you want|to use?", "gx" : 0, "gy" : 1},
+        {"id": "feedin", "l" : "Which properties|do you want|to feed in?", "gx" : 5, "gy" : 1}, {"id": "loss", "l" : "Loss: {loss}|Accuracy: {accuracy}", "gx" : 24, "gy" : 1},
+        {"id": "val_loss", "l" : "Value loss: {vloss}|Value accuracy: {vaccuracy}", "gx" : 24, "gy" : 2},
+        {"id": "click", "l" : "Click on bar|to turn on/off|discrete mode", "gx" : 22, "gy" : 9}
+        
+    ],
+    
+    "sliders" : [
+        
+        {"id" : "ratioRange", "l" : "data ratio: ", "v" : 50, "range" : [0, 100], "decimal" : 0, "suffix" : "%", "gx" : 0, "gy" : 8 },
+        {"id" : "noiseRange", "l" : "noise: ", "v" : 0, "range" : [0, 50], "decimal" : 1, "suffix" : "", "gx" : 0, "gy" : 9 },
+        {"id" : "batchRange", "l" : "batch size: ", "v" : 0, "range" : [0, 30], "decimal" : 1, "suffix" : "", "gx" : 0, "gy" : 10 }
+        
+    ]
+...
+```
 
 
