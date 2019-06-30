@@ -8,17 +8,17 @@ This neural network playrgound was inspired by TensorFlow playground, created by
 
 ![UI/UX](https://github.com/vkuchinov/dataVisualization/blob/master/NeuralNetworks/references/screenshot.png?raw=true)
 
-Since, my friendly collaborator M., who was working on Python back-end server, couldn't do his job well and didn't develop:  1. data exchange between server-side and browser, 2. didn't follow my JSON structure syntax and 3. didn't 
+Since, my friendly collaborator M., who was working on Python back-end server, couldn't do his job well and didn't develop
 
   - a reliable data exchange between server-side and browser
   - neither didn't follow my provided JSON structure syntax nor proposed his own
   - haven't answer my question is it possible to start calculations from any epoch by knowing previous results, or you have always start from zero stage.
  
-The only thing I could do in this case is to generate a mockup data for at least 5 epochs and make an interactive workable demo for those functions which use these values and parameters.
+The only thing I could do in this case is to generate a fake mockup data for at least 5 epochs to make an interactive workable demo for those functions which use these values and parameters.
 
 # The Mockup JSON data
 
-First of all, the JSON objects has nclude all neurons, including 8 inputs with same parameters as hidden/output have. That's a key point!
+First of all, the JSON objects has include all neurons, including 8 inputs with same parameters as hidden/output have. That's a key point!
 
 Second, as I have already mentioned, there are five 'pre-calculated' epochs. It could be 20, 50 or even 99 epochs. In this case, the transitions between epochs (animation) would be really fast.
 
@@ -187,8 +187,9 @@ The same for synapses—one value for every pre-calculated epoch.
 }
 ```
 
-While, M. didn't do, actually we didn't even discussed it, any functions for adding/removing hidden neurons and layers, the UI part for doing it could be considered as placeholders.
-The same for sliders.
+While, M. didn't do, actually we didn't even discussed it, any functions for adding/removing hidden neurons and layers, the UI part for doing it could be considered as placeholders. Ridiculous crazy, cause adding/removing is just nothing more but playing with NN Lyaers parameter. [10,10] > [9,10] removes one neuron from first hidden layer, [9,10,10] created another third hidden layer with 10 neurons.
+
+The same for sliders. Just placeholders.
 
 The only interaction which could be done at this stage is a player along with some minor actions.
 
