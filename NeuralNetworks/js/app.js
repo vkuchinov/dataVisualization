@@ -8,7 +8,7 @@ TODO LIST:
 [-] planned, [x] done, [!] see comments
 
 I have used upper controls (epoch and sliders) and visual aesthetics 
-from TensorFlow Playgroundby Daniel Smilkov and Shan Carter, Google, 
+from TensorFlow Playground by Daniel Smilkov and Shan Carter, Google, 
 everything else is developed from scratch by me.
 
 @author Vladimir V KUCHINOV
@@ -2329,7 +2329,7 @@ function parseNetworkData(data_) {
     network.neurons[network.neurons.length - 1].id = "out";
     var outIndex = network.neurons[network.neurons.length - 1].layer;
 
-    data_.weights.forEach(function(d_) {
+    data_.synapses.forEach(function(d_) {
 
         if (d_.source != -1) {
 
