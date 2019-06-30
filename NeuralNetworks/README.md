@@ -221,7 +221,7 @@ If you want to set gaps between blocks, just replace gap with any value at confi
 The general setting for the whole D3.JS widget, like overall width, height and colour schemes.
 
 ```
-...
+
 parentDiv : "network", parent div
 w : 1024, interface width
 h : 682, interface height
@@ -262,7 +262,7 @@ bw : ["#000000", "#808080", "#FFFFFF"], //service gradient, please don't change 
         {"id" : "batchRange", "l" : "batch size: ", "v" : 0, "range" : [0, 30], "decimal" : 1, "suffix" : "", "gx" : 0, "gy" : 10 }
         
     ]
-...
+    
 ```
 
 
