@@ -192,7 +192,7 @@ The same for sliders.
 
 The only interaction which could be done at this stage is a player along with some minor actions.
 
-[![IMAGE ALT TEXT](http://img.youtube.com/vi/yKCi5DJwF4k/0.jpg)](http://www.youtube.com/watch?v=yKCi5DJwF4k "Demo")
+[![IMAGE ALT TEXT](https://github.com/vkuchinov/dataVisualization/blob/master/NeuralNetworks/references/screenshot.png?raw=true "Demo")
 click on top of this screenshot to see video ⇪ 
 
 # The Mockup JSON data
