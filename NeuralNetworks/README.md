@@ -6,6 +6,8 @@
 
 This neural network playrgound was inspired by TensorFlow playground, created by  Daniel Smilkov and Shan Carter from Google and inherits its visual aesthetics only.
 
+![UI/UX](https://github.com/vkuchinov/dataVisualization/blob/master/NeuralNetworks/references/screenshot.png?raw=true)
+
 Since, my friendly collaborator M., who was working on Python back-end server, couldn't do his job well and didn't develop:  1. data exchange between server-side and browser, 2. didn't follow my JSON structure syntax and 3. didn't 
 
   - a reliable data exchange between server-side and browser
