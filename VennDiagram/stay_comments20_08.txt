@@ -1,0 +1,141 @@
+Hi, so here are my responses to your comments:
+
+[!] By now, there are three input props for VennDiagram component:
+data, width and height.
+
+
+So, 2 things.
+
+1.
+
+I don't want to pass width and height as parameters explicitly if I can avoid it. The diagram is going to be a part of a react-bootstrap Grid component and should calculate the width and height automatically from that. What I specifically mean is, that in the ZeroTrustReportPage.js file, in line 110, you have this JSX and the VennDiagram component will go where it says "PUT VENN DIAGRAM HERE":
+<Grid fluid={true}>
+<Row className="show-grid">
+<Col xs={8} sm={8} md={8} lg={8}>
+PUT VENN DIAGRAM HERE
+// Something like <PillarsGradesDiagram pillarsGrades=... />
+</Col>
+<Col xs={4} sm={4} md={4} lg={4}>
+<MonkeysStillAliveWarning allMonkeysAreDead={this.state.allMonkeysAreDead}/>
+<SecurityIssuesGlance issuesFound={this.anyIssuesFound()}/>
+<StatusesToPillarsSummary statusesToPillars={this.state.pillars.statusesToPillars}/>
+</Col>
+</Row>
+</Grid>
+Please rename the "data" prop to "pillarsGrades".
+
+[-] Since layout has to be hardcoded, it's driven by this.layout object.
+There're many ways of setting circles/arc positions, now I'm using the
+stright-forward one.
+
+Usually, I am put all hardcoded params to external JSON file, i.e config.json.
+Let me know if it's a good idea.
+
+
+While putting them in an external JSON file sounds good, I'm not sure it's necessary. Just putting the hardcoded params in well-named consts at the top of the file will be fine.
+
+
+[-] Could rearange z-indecies for nodes on hover, so highlighted node would have highest z-index.
+
+
+Sounds like a really good idea, please do.
+
+
+[-] If you want callback on click even, please provide additional info what are you expecting to pass
+through this.
+
+
+Good question. Please allow a callback that recieves as a parameter which pillar was pressed. I'll implement a function like this:
+function handlePillarClicked(pillar) {
+if pillar === "Data"...
+}
+and allow the callback to be passed as a prop into the diagram component, like so:
+<PillarsGradesDiagram pillarsGrades=... pillarClickCallback=handlePillarClicked />
+
+
+[!] I don't used to make lots of comments in my code, but treying to name everything in a way,
+so third person could instantly get its job and concept.
+
+If it is not enoough just let me know.
+
+
+I agree that code is better than documentation. To improve clarity, please improve and document especially difficult parts. For me that is:
+
+
+
+In "onMouseMove":
+
+
+explain the call to stopPropagation
+explain the querySelectorAll call
+Extract if condition to separate function and generally try to separate to smaller functions
+Document each param in setState
+
+
+In "render"
+
+
+Document "d_.hasOwnProperty('cx')"
+
+And in general try to aboid the "d_" and "i_" variable names and instead give the variables meaningful names.
+
+[!] I have tried to avoid using D3 so much, especially its mouse events, cause it creates a bunch
+of listeners for every children DOM elements. I have tried to use raw SVG objects.
+The ArcNode is the only component where I've to call d3.arc constrictor.
+
+OK
+
+[!] There are lots of discussion over different blogs an forums that ReactJS and D3.JS have a DOM
+issue conflict, [could find lots of articels at medium.org about that, for example,
+https://medium.com/@tibotiber/react-d3-js-balancing-performance-developer-experience-4da35f912484].
+
+Since the current component has only a few DOM elements, I don't thing we would have any troubles,
+but please keep in mind that I could tweak current version with react-faux-dom.
+
+Actually, by now, I'm using D3 only for math, for arc path calculations.
+
+If it will work within the website, it's good for me.
+
+[!] Don't mind about code spacings, it's just for me, the final code would be clear out of them.
+
+OK
+
+Here are my own comments, as well:
+
+
+Awesome work! :)
+
+
+
+Please change the colours to:
+#5cb85c for green
+#f0ad4e for yellow
+#d9534f for red
+#777 for gray
+
+
+
+Please run code inspection on the code. There are a few issues that should be solved:
+
+
+
+missing semicolons at end of statements and too many on others.
+removeAmpersand, removeBrokenBar, setTitle can be static and should be utility functions in a seperate file
+VennDiagram.prefix is unused
+There are unused params (like _i)
+
+
+Please add PropTypes check to all components. You can read about it here: https://www.npmjs.com/package/prop-types
+import * as PropTypes from "prop-types";
+
+
+...
+
+VennDiagram.propTypes = {
+data: PropTypes.array,
+width: PropTypes.number,
+height: PropTypes.number,
+};
+
+
+Please provide this as a Pull Request in GitHub in the correct branch.
